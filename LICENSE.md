@@ -5,7 +5,7 @@ Version 1.0, August 2024
 Terms and Conditions for Use, Reproduction, and Distribution
 
 1. Definitions
-- "Author" refers to the original creator of the software.
+- "Spec.0 LicenseAuthor" refers to the original creator of the software.
 - "Software" refers to the work covered by this license, including the original work and any modifications or derivative works.
 - "Private Use" refers to using the software in a personal capacity without any commercial intent or public distribution.
 - "Commercial Use" refers to using the software in any form of commerce, including, but not limited to, selling, licensing, or offering the software as a service.
