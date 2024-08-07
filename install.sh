@@ -19,8 +19,8 @@ enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
 
 # Montar, instalar y documentar
-if [[ -f "$install_dir/systemd_file/$service_name" ]]; then
-    sudo cp "$install_dir/systemd_file/$service_name $service_location"
+if [[ -f "$install_dir/ssp_/systemd_file/$service_name" ]]; then
+    sudo cp "$install_dir/ssp_/systemd_file/$service_name $service_location"
     if [[ -f $service_location/$service_name ]]; then
         # Habilitar servicio
         $reload_damon
@@ -31,15 +31,16 @@ if [[ -f "$install_dir/systemd_file/$service_name" ]]; then
         else
             echo "Status cancelled."
         fi
-        echo "Installation complete"
+        echo "Installation complete, exiting..."
         # Servicio completado, salida 3
         exit 3
     else
-        echo "Error while installing."
+        echo "Error while installing, exiting..."
         # error en la instalacion, salida 2
         exit 2
     fi
 else
+    echo "File does not exist, exiting..."
     # Error de existencia en ficheros o directorios, salida 1
     exit 1
 fi
