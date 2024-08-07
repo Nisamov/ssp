@@ -25,14 +25,14 @@ if [[ $license_bypass == "y" ]]; then
     sudo less "$install_dir/LICENSE.md"
 fi
 
+# Llamar al generador de servicio
+sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
+
 # Montar, instalar y documentar
-if [[ -f "$install_dir/ssp_/systemd_file/$service_name" ]]; then
-    sudo cp "$install_dir/ssp_/systemd_file/$service_name" "$service_location/$service_name"
+if [[ ! -f "$service_location/$service_name" ]]; then
+    # Llamar al generador de servicio
+    sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
     if [[ -f $service_location/$service_name ]]; then
-        # Habilitar servicio
-        $reload_damon
-        $unmask_daemon
-        $enable_daemon
         read -p "Do you want to see ssp status [y/n]: " ssp_satus
         if [[ $ssp_satus == "y" ]]; then
             $status_daemon
@@ -48,7 +48,15 @@ if [[ -f "$install_dir/ssp_/systemd_file/$service_name" ]]; then
         exit 2
     fi
 else
-    echo "File does not exist, exiting..."
-    # Error de existencia en ficheros o directorios, salida 1
+    echo "File already exist, exiting..."
+
+    read -p "Do you want to see ssp status [y/n]: " ssp_satus
+    if [[ $ssp_satus == "y" ]]; then
+        $status_daemon
+    else
+        echo "Status cancelled."
+    fi
+
+    # Existencia previa de fichero, salida 1
     exit 1
 fi
