@@ -35,7 +35,7 @@ EOL
 sudo chmod 644 "/usr/lib/systemd/system/ssp.service"
 
 # Crear enlace simbolico
-sudo ln -s "/usr/lib/systemd/system/ssp.service" "/etc/systemd/system/mi_servicio.service"
+sudo ln -s "/usr/lib/systemd/system/ssp.service" "/etc/systemd/system/ssp.service"
 
 # Habilitar servicio
 $reload_damon

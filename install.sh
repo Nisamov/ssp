@@ -6,7 +6,7 @@
 # Ruta del directorio donde se encuentra el script de instalación
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # Ubicacion del servicio
-service_location="/etc/systemd/system"
+service_location="/usr/lib/systemd/system/"
 # Nombre del servicio
 service_name="ssp.service"
 # Recarga, Habilitacion y Estado del demonio
