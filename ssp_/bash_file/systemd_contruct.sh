@@ -31,6 +31,9 @@ Group=$GROUP
 WantedBy=default.target
 EOL
 
+# Permisos
+sudo chmod 777 "/etc/systemd/system/ssp.service"
+
 # Habilitar servicio
 $reload_damon
 $unmask_daemon
