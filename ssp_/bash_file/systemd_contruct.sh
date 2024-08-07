@@ -15,14 +15,14 @@ USER=$(whoami)
 GROUP=$(id -gn)
 
 # Generar el archivo ssp.service
-cat <<EOL > /etc/systemd/system/ssp.service
+cat <<EOL > /usr/lib/systemd/system/ssp.service
 [Unit]
 Description=Secure System Protocol
 DefaultDependencies=no
 After=local-fs.target
 
 [Service]
-ExecStart=/ruta/al/tu-script.sh
+ExecStart=/ruta/al/script/no/programada.sh
 Restart=always
 User=$USER
 Group=$GROUP
@@ -32,7 +32,10 @@ WantedBy=default.target
 EOL
 
 # Permisos
-sudo chmod 777 "/etc/systemd/system/ssp.service"
+sudo chmod 644 "/usr/lib/systemd/system/ssp.service"
+
+# Crear enlace simbolico
+sudo ln -s "/usr/lib/systemd/system/ssp.service" "/etc/systemd/system/mi_servicio.service"
 
 # Habilitar servicio
 $reload_damon
