@@ -20,7 +20,7 @@ status_daemon="sudo systemctl status ssp.service"
 
 # Montar, instalar y documentar
 if [[ -f "$install_dir/ssp_/systemd_file/$service_name" ]]; then
-    sudo mv "$install_dir/ssp_/systemd_file/$service_name $service_location/$service_name"
+    sudo cp "$install_dir/ssp_/systemd_file/$service_name" "$service_location/$service_name"
     if [[ -f $service_location/$service_name ]]; then
         # Habilitar servicio
         $reload_damon
