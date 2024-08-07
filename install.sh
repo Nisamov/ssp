@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Spec.0 License 2024 Andres Rulsan Abadias Otal
+
 # Otorgar permisos al software
 
 
@@ -17,4 +19,27 @@ enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
 
 # Montar, instalar y documentar
-echo "$install_dir"
+if [[ -f "$install_dir/systemd_file/$service_name" ]]; then
+    sudo cp "$install_dir/systemd_file/$service_name $service_location"
+    if [[ -f $service_location/$service_name ]]; then
+        # Habilitar servicio
+        $reload_damon
+        $enable_daemon
+        read -p "Do you want to see ssp status [y/n]: " ssp_satus
+        if [[ $ssp_satus == "y" ]]; then
+            $status_daemon
+        else
+            echo "Status cancelled."
+        fi
+        echo "Installation complete"
+        # Servicio completado, salida 3
+        exit 3
+    else
+        echo "Error while installing."
+        # error en la instalacion, salida 2
+        exit 2
+    fi
+else
+    # Error de existencia en ficheros o directorios, salida 1
+    exit 1
+fi
