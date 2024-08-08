@@ -60,3 +60,6 @@ else
     # Existencia previa de fichero, salida 1
     exit 1
 fi
+
+# Recarga de seguridad
+$reload_damon
