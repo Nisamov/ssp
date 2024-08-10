@@ -15,6 +15,8 @@ unmask_daemon="sudo systemctl unmask ssp.service"
 enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
 
+allowed_services="/etc/ssp/permitted_services.txt"
+
 # Limpiar consola
 clear
 
@@ -24,6 +26,9 @@ read -p "Do you want to read the full license? [y/n]: " license_bypass
 if [[ $license_bypass == "y" ]]; then
     sudo less "$install_dir/LICENSE.md"
 fi
+
+sudo mkdir "/etc/ssp"
+sudo touch "$allowed_services"
 
 # Llamar al generador de servicio
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
@@ -61,5 +66,11 @@ else
     exit 1
 fi
 
-# Recarga de seguridad
-$reload_damon
+# Creacion ejecutable ( para realizar acciones como la creacion y el añadido de servicios a la lista de forma automatica )
+
+# Ruta de instalacion -- 
+
+# Ejemplo de ejcucion:
+# ssp -a -> Añadir servicio
+# ssp -r -> Desinstalar servicio
+# ssp -s -> Mostrar servicios permitidos (con less)
