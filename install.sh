@@ -70,6 +70,8 @@ fi
 
 # Ruta de instalacion -- 
 
+install_dir="/usr/local/sbin"
+
 # Ejemplo de ejcucion:
 # ssp -a -> Añadir servicio
 # ssp -r -> Desinstalar servicio
