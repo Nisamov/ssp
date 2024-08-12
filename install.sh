@@ -67,18 +67,18 @@ fi
 
 # Ruta de instalacion -- 
 
-install_dir="/usr/local/sbin"
+install_dir_sbin="/usr/local/sbin"
 
 # Instalacion de fichero
-sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir/ssp"
+sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
 # Con ese nombre podra llamarse sin contener la extension, mejorando la previsualizacion
 
 # Comprobacion de instalacion exitosa
-if [[ -f "$install_dir/ssp" ]]; then
+if [[ -f "$install_dir_sbin/ssp" ]]; then
     echo "Installation Complete"
 else
     echo "Error While Installing..."
-    while [[ ! -f "$install_dir/ssp" ]]; do
-        sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir/ssp"
+    while [[ ! -f "$install_dir_sbin/ssp" ]]; do
+        sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
     done
 fi
