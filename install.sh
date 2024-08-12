@@ -61,9 +61,6 @@ else
     else
         echo "Status cancelled."
     fi
-
-    # Existencia previa de fichero, salida 1
-    exit 1
 fi
 
 # Creacion ejecutable ( para realizar acciones como la creacion y el añadido de servicios a la lista de forma automatica )
