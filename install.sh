@@ -72,7 +72,16 @@ fi
 
 install_dir="/usr/local/sbin"
 
-# Ejemplo de ejcucion:
-# ssp -a -> Añadir servicio
-# ssp -r -> Desinstalar servicio
-# ssp -s -> Mostrar servicios permitidos (con less)
+# Instalacion de fichero
+sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir/ssp"
+# Con ese nombre podra llamarse sin contener la extension, mejorando la previsualizacion
+
+# Comprobacion de instalacion exitosa
+if [[ -f "$install_dir/ssp" ]]; then
+    echo "Installation Complete"
+else
+    echo "Error While Installing..."
+    while [[ ! -f "$install_dir/ssp" ]]; do
+        sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir/ssp"
+    done
+fi
