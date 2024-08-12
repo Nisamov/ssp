@@ -82,3 +82,6 @@ else
         sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
     done
 fi
+
+# Permisos
+sudo chmod 777 "$install_dir_sbin/ssp"
