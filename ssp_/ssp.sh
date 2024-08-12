@@ -9,13 +9,13 @@ ALLOWED_SERVICES="/etc/ssp/permitted_services.txt"
 # ssp -s -> Mostrar servicios permitidos (con less)
 
 if [[ $2 == "-a" ]]; then
-    echo $2 >> "$ALLOWED_SERVICES"
+    sudo echo $2 >> "$ALLOWED_SERVICES"
     echo "Servicio $2 añadido a la lista permitida"
 elif [[ $2 == "-r" ]]; then
-    sed -i "/$2/d" "$ALLOWED_SERVICES"
+    sudo sed -i "/$2/d" "$ALLOWED_SERVICES"
     echo "Servicio $2 eliminado de la lista permitida"
 elif [[ $2 == "-d" ]]; then
     echo "Desinstalando programa..."
 else
-     echo "Uso: $0 {add|remove} servicio"
+     echo "Uso: $0 { -a (Add service to list) | -r (Remove service from list) | -d (Uninstall software) } servicio"
 fi
