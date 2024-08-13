@@ -1,0 +1,45 @@
+name: Update Version in Profile README
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Paso 1: Clonar el repositorio del proyecto SSP
+    - name: Checkout SSP repository
+      uses: actions/checkout@v3
+      with:
+        repository: 'Nisamov/ssp'
+        path: ssp_repo
+
+    # Paso 2: Obtener la última versión publicada
+    - name: Get the latest release version
+      id: get_version
+      run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+
+    # Paso 3: Clonar el repositorio del perfil
+    - name: Checkout profile repository
+      uses: actions/checkout@v3
+      with:
+        repository: 'Nisamov/Nisamov'
+        path: profile_repo
+        token: ${{ secrets.SSP_token }}
+
+    # Paso 4: Actualizar el archivo README.md en el repositorio del perfil
+    - name: Update Profile README.md with new version
+      run: |
+        sed -i "s/\(Working on SSP - Creating Security System Protocol | \)[0-9]\+\.[0-9]\+\.[0-9]\+\( | \*\*[SSP]\)/\1${{ env.VERSION }}\2/g" profile_repo/README.md
+
+    # Paso 5: Hacer commit y push de los cambios en el repositorio del perfil
+    - name: Commit changes
+      run: |
+        cd profile_repo
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        git commit -m "Update SSP version to ${{ env.VERSION }} in Profile README"
+        git push
