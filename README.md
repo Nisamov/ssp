@@ -1,2 +1,1 @@
-# SSP
-Secure Service Protocol
+![Logo principal](/_repo/_media/SecureServiceProtocol.jpg)
