@@ -1,4 +1,1 @@
-# SSP
-Secure Service Protocol
-
--- Contenido agregado proximamente
+![Logo principal](/_repo/_media/SecureServiceProtocol.jpg)
