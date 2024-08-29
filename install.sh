@@ -82,11 +82,11 @@ if [[ $localservices == "y" ]]; then
         echo "Select your Operative System:"
         echo "[1] Ubuntu"
         echo ""
-        read -p "Number Input (1): " numberinput
+        read -p "Number Input: " numberinput
     done
 
     if [[ $numberinput == 1 ]]; then
-        cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
+        cp "ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
     fi
 fi
 
