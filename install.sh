@@ -88,7 +88,7 @@ read -p "Do you want to install local services? [y/n]: " localservices
 
 if [[ $localservices == "y" ]]; then
 
-    while [ $numberinput -lt 10 && $numberinput -gt 0 ] do;
+    while [ $numberinput -lt 10 && $numberinput -gt 0 ] do
         echo "Select your Operative System:"
         echo "[1] Ubuntu"
         echo ""
