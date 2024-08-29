@@ -98,11 +98,11 @@ fi
 
 # If user wants recomended services
 
-recomendedservicesfile
+recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
 
 read -p "Would you want recomended services? [y/n]: " recomendedservices
 if [[ $recomendedservices == "y" ]]; then
-    sudo echo "$install_dir/ssp_/recomendedservices/recomended.txt" >> "$allowed_services"
+    echo "$recomendedservicesfile" >> "$allowed_services"
 else
     echo "Recomended services rejected."
 fi
