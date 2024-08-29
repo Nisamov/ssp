@@ -94,7 +94,7 @@ if [[ $localservices == "y" ]]; then
     done
 
     if [[ $numberinput == 1 ]]; then
-        cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "/etc/ssp/permitted_services.txt"
+        cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
     fi
 fi
 
