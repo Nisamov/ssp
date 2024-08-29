@@ -96,5 +96,16 @@ else
     sudo touch "$allowed_services"
 fi
 
+# If user wants recomended services
+
+recomendedservicesfile
+
+read -p "Would you want recomended services? [y/n]: " recomendedservices
+if [[ $recomendedservices == "y" ]]; then
+    sudo echo "$install_dir/ssp_/recomendedservices/recomended.txt" >> "$allowed_services"
+else
+    echo "Recomended services rejected."
+fi
+
 # Permisos
 sudo chmod 777 "$install_dir_sbin/ssp"

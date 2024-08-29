@@ -1,4 +1,4 @@
-#./ Service List, comment by writting "#./" before each line
+#./ Service List, comment by writting "#" before each line
 
 
 apparmor.service
