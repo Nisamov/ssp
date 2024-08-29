@@ -98,7 +98,7 @@ if [[ $localservices == "y" ]]; then
     fi
 fi
 
-if [[-f $allowed_services ]]; then
+if [[ -f $allowed_services ]]; then
     echo "File $allowed_services existing"
 else
     sudo touch $allowed_services
