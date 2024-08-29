@@ -86,11 +86,9 @@ if [[ $localservices == "y" ]]; then
     done
 
     if [[ $numberinput == 1 ]]; then
-        cp "ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
+        sudo cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
     fi
 fi
-
-echo "install dir: $install_dir"
 
 if [[ -f $allowed_services ]]; then
     echo "File $allowed_services exists"
