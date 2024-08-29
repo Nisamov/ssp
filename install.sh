@@ -28,7 +28,6 @@ if [[ $license_bypass == "y" ]]; then
 fi
 
 sudo mkdir "/etc/ssp"
-sudo touch "$allowed_services"
 
 # Llamar al generador de servicio
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
@@ -99,6 +98,11 @@ if [[ $localservices == "y" ]]; then
     fi
 fi
 
+if [[-f $allowed_services ]]; then
+    echo "File $allowed_services existing"
+else
+    sudo touch $allowed_services
+fi
 
 # Permisos
 sudo chmod 777 "$install_dir_sbin/ssp"
