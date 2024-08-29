@@ -90,6 +90,8 @@ if [[ $localservices == "y" ]]; then
     fi
 fi
 
+echo "install dir: $install_dir"
+
 if [[ -f $allowed_services ]]; then
     echo "File $allowed_services exists"
 else
