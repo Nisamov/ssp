@@ -80,11 +80,10 @@ if [[ $localservices == "y" ]]; then
     numberinput=-1
 
 operativesystem(){    
-    while [[ $numberinput -ne 1 || $numberinput != "?" ]]; do
+    while [[ $numberinput -ne 1 ]]; do
         echo "Select your Operative System:"
         echo "[1] Ubuntu"
         echo "[-] There are no more Operative Systems at the moment." # Mas adelante esto no sera necesario, porque analizara automaticamente las rutas y segun si existen rutas, detectara el sistema operativo en el que se ejecuta
-        echo "[?] Show Help"
         echo ""
         read -p "Number Input: " numberinput
     done
@@ -92,14 +91,6 @@ operativesystem(){
 
     if [[ $numberinput == 1 ]]; then
         sudo cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
-    elif [[ $numberinput == "?" ]]; then
-        # Mostrar ayuda
-        echo "This is temporal, do not take this into account."
-        echo "Help Nisamov (Andres Ruslan Abadias Otal) with the developement, by sharing, donating or writting him an aproval message."
-        # Luego volver a llamar a la funcion
-        operativesystem
-    else
-        echo "There was one unexpected error (Line 98 [82-95!])."
     fi
 fi
 
