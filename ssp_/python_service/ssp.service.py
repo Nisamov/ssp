@@ -8,6 +8,7 @@ def read_whitelist():
     """Lee el archivo de la lista blanca y devuelve una lista de servicios permitidos, ignorando líneas que comienzan con '#'."""
     with open(whitelist_path, 'r') as f:
         permitted_services = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    print(f"Servicios permitidos leídos: {permitted_services}")  # Depuración
     return permitted_services
 
 def get_active_services():
@@ -15,6 +16,7 @@ def get_active_services():
     result = subprocess.run(['systemctl', 'list-units', '--type=service', '--state=running', '--no-pager', '--no-legend'],
                             stdout=subprocess.PIPE, text=True)
     active_services = [line.split()[0] for line in result.stdout.splitlines()]
+    print(f"Servicios activos detectados: {active_services}")  # Depuración
     return active_services
 
 def monitor_services():
