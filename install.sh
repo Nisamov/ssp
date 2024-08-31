@@ -61,7 +61,7 @@ fi
 
 # Proceso de instalación de servicios del sistema
 
-cp "$install_dir/ssp_/necessaryservices/mainservices.txt" >> "$allowed_services"
+cp "$install_dir/ssp_/necessaryservices/mainservices.txt" > "$allowed_services"
 
 read -p "Do you want to install local services? [y/n]: " localservices
 if [[ $localservices == "y" ]]; then
