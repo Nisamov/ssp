@@ -9,8 +9,14 @@ ALLOWED_SERVICES="/etc/ssp/permitted_services.txt"
 # ssp -s -> Mostrar servicios permitidos (con less)
 
 if [[ $1 == "-a" ]]; then
-    sudo echo $2 >> "$ALLOWED_SERVICES"
-    echo "Servicio $2 añadido a la lista permitida"
+    # Confirmacion
+    read -p "Are you sure you want to add '$2' to whitelist? [y/n]: " newserviceaccept
+    if [[ $newserviceaccept == "y" ]]; then
+        sudo echo $2 >> "$ALLOWED_SERVICES"
+        echo "'$2' service added to whitelist."
+    else
+        echo "Action cancelled."
+    fi
 elif [[ $1 == "-r" ]]; then
     sudo sed -i "/$2/d" "$ALLOWED_SERVICES"
     echo "Servicio $2 eliminado de la lista permitida"

@@ -17,7 +17,7 @@ GROUP=$(id -gn)
 # Generar el archivo ssp.service
 sudo bash -c "cat <<EOL > /usr/lib/systemd/system/ssp.service
 [Unit]
-Description=Secure System Protocol
+Description=Secure Service Protocol
 After=local-fs.target
 
 [Service]
