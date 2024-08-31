@@ -25,9 +25,8 @@ ExecStart=/usr/bin/python3 /usr/local/sbin/ssp/py_service/ssp.service.py
 Restart=always
 User=$USER
 Group=$GROUP
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=ssp-service
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
