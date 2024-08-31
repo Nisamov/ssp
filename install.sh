@@ -34,8 +34,11 @@ fi
 # Instalacion de rutas y servicio
 # Montar rutas
 if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
-    sudo mkdir -p "/usr/local/sbin/ssp/"
+    sudo mkdir -p "$install_dir_sbin/ssp/"
 fi
+
+# Instalación de ejecutable
+sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
 
 if [[ ! -d "/usr/local/sbin/ssp/py_service" ]]; then
     sudo mkdir -p "/usr/local/sbin/ssp/py_service"
@@ -73,23 +76,6 @@ else
     else
         echo "Status cancelled."
     fi
-fi
-
-# Instalación de ejecutable
-sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
-
-# Comprobación de instalación exitosa
-if [[ -f "$install_dir_sbin/ssp" ]]; then
-    echo "Installation Complete"
-else
-    echo "Error While Installing..."
-    for i in {1..5}; do
-        sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
-        if [[ -f "$install_dir_sbin/ssp" ]]; then
-            echo "Installation Complete"
-            break
-        fi
-    done
 fi
 
 # Proceso de instalación de servicios del sistema

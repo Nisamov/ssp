@@ -22,7 +22,7 @@ DefaultDependencies=no
 After=local-fs.target
 
 [Service]
-ExecStart=/ruta/al/script/no/programada.sh
+ExecStart=/usr/local/sbin/ssp/py_service/ssp.service.py
 Restart=always
 User=$USER
 Group=$GROUP
