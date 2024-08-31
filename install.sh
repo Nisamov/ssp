@@ -61,7 +61,7 @@ fi
 
 # Proceso de instalación de servicios del sistema
 
-sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" >> "$allowed_services"
+cp "$install_dir/ssp_/necessaryservices/mainservices.txt" >> "$allowed_services"
 
 read -p "Do you want to install local services? [y/n]: " localservices
 if [[ $localservices == "y" ]]; then
@@ -77,7 +77,7 @@ if [[ $localservices == "y" ]]; then
 
     if [[ $numberinput == 1 ]]; then
         # Asegurarse de que allowed_services termine con una nueva línea
-        sed -i -e '$a\' "$install_dir/ssp_/neccessaryservices/mainservices.txt"
+        sed -i -e '$a\' "$allowed_services"
         sudo cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
     fi
 fi
