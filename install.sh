@@ -57,14 +57,6 @@ sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
 # Montar, instalar y documentar
 if [[ ! -f "$service_location/$service_name" ]]; then
     sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
-else
-    echo "File already exists, exiting..."
-    read -p "Do you want to see ssp status [y/n]: " ssp_status
-    if [[ $ssp_status == "y" ]]; then
-        $status_daemon
-    else
-        echo "Status cancelled."
-    fi
 fi
 
 # Proceso de instalación de servicios del sistema
