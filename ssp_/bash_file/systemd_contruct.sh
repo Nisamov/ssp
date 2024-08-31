@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Spec.0 License 2024 Andres Rulsan Abadias Otal
-
 # Script de generación de archivo ssp.service
 
 # Recarga, habilitación y estado del demonio
@@ -31,13 +29,16 @@ sudo chmod +x "$PYTHON_SCRIPT_PATH"
 sudo bash -c "cat <<EOL > /usr/lib/systemd/system/ssp.service
 [Unit]
 Description=Secure Service Protocol
-After=local-fs.target
+After=network.target
 
 [Service]
+Type=simple
+WorkingDirectory=/usr/local/sbin/ssp/py_service
 ExecStart=/usr/bin/python3 $PYTHON_SCRIPT_PATH
 Restart=always
 User=$USER
 Group=$GROUP
+Environment=PYTHONUNBUFFERED=1
 StandardOutput=journal
 StandardError=journal
 
