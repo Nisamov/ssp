@@ -120,3 +120,13 @@ fi
 
 # Permisos
 sudo chmod 777 "$install_dir_sbin/ssp"
+
+# Recarga del demonio y consejo final
+sudo systemctl daemon-reload
+sudo systemctl restart ssp.service
+
+echo "If service is not running use:"
+echo ""
+echo "sudo systemctl daemon-reload"
+echo "sudo systemctl restart ssp.service"
+echo ""
