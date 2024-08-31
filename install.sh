@@ -27,7 +27,23 @@ echo "By using the software, you agree to abide by the terms of the Spec.0 Licen
 read -p "Do you want to read the full license? [y/n]: " license_bypass
 if [[ $license_bypass == "y" ]]; then
     sudo less "$install_dir/LICENSE.md"
+else
+    echo "Action cancelled."
 fi
+
+# Instalacion de rutas y servicio
+# Montar rutas
+if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
+    sudo mkdir -r "/usr/local/sbin/ssp/"
+fi
+
+if [[ ! -d "/usr/local/sbin/ssp/py_service" ]]; then
+    sudo mkdir "/usr/local/sbin/ssp/py_service"
+fi
+
+# CLonar el servicio en la ruta
+sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp/py_service/ssp.service.py"
+
 
 # Crear directorio si no existe
 sudo mkdir -p "/etc/ssp"
@@ -43,10 +59,8 @@ if [[ ! -f "$service_location/$service_name" ]]; then
         if [[ $ssp_status == "y" ]]; then
             $status_daemon
         else
-            echo "Status cancelled."
+            echo "Action cancelled."
         fi
-        echo "Installation complete, exiting..."
-        exit 3
     else
         echo "Error while installing, exiting..."
         exit 2
@@ -108,7 +122,7 @@ read -p "Would you want recomended services? [y/n]: " recomendedservices
 if [[ $recomendedservices == "y" ]]; then
     cat "$recomendedservicesfile" >> "$allowed_services"
 else
-    echo "Recomended services rejected."
+    echo "Action cancelled."
 fi
 
 read -p "Would you like to see current list? [y/n]: " currentlist

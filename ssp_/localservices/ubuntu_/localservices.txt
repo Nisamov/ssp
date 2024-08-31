@@ -1,5 +1,5 @@
 #./ Service List, comment by writting "#" before each line
-
+#./ This file is supposed to be edited using SSP, please do not touch anything unless you know what you are doing
 
 apparmor.service
 apport.serviceblk-availability.service
