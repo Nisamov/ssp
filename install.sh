@@ -18,6 +18,10 @@ status_daemon="sudo systemctl status ssp.service"
 # Limpiar consola
 clear
 
+echo ""
+# Para no escribir innecesariamente lineas de codigo
+echo "During installation, if you press any word that is not 'y (yes)', it will cancel the current operation and skip to the next one."
+echo ""
 # Mostrar licencia
 echo "By using the software, you agree to abide by the terms of the Spec.0 License."
 read -p "Do you want to read the full license? [y/n]: " license_bypass
@@ -105,6 +109,13 @@ if [[ $recomendedservices == "y" ]]; then
     cat "$recomendedservicesfile" >> "$allowed_services"
 else
     echo "Recomended services rejected."
+fi
+
+read -p "Would you like to see current list? [y/n]: " currentlist
+if [[ $currentlist == "y" ]]; then
+    sudo less "$allowed_services"
+else
+    echo "Action cancelled."
 fi
 
 # Permisos
