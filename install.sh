@@ -46,7 +46,7 @@ fi
 
 # CLonar el servicio en la ruta
 sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp/py_service/ssp.service.py"
-
+sudo chmod +x /usr/local/sbin/ssp/py_service/ssp.service.py
 
 # Crear directorio si no existe
 sudo mkdir -p "/etc/ssp"
