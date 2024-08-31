@@ -79,7 +79,6 @@ read -p "Do you want to install local services? [y/n]: " localservices
 if [[ $localservices == "y" ]]; then
     numberinput=-1
 
-operativesystem(){    
     while [[ $numberinput -ne 1 ]]; do
         echo "Select your Operative System:"
         echo "[1] Ubuntu"
@@ -87,7 +86,6 @@ operativesystem(){
         echo ""
         read -p "Number Input: " numberinput
     done
-}
 
     if [[ $numberinput == 1 ]]; then
         sudo cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
