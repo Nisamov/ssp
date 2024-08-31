@@ -78,7 +78,7 @@ if [[ $localservices == "y" ]]; then
     if [[ $numberinput == 1 ]]; then
         # Asegurarse de que allowed_services termine con una nueva línea
         sed -i -e '$a\' "$allowed_services"
-        sudo cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
+        cat "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" >> "$allowed_services"
     fi
 fi
 
