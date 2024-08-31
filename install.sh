@@ -60,6 +60,12 @@ if [[ ! -f "$service_location/$service_name" ]]; then
 fi
 
 # Proceso de instalación de servicios del sistema
+
+# Creacion de fichero
+sudo touch "$allowed_services"
+# Añadir servicios necesarios al fichero
+cat "$install_dir/ssp_/neccessaryservices/mainservices.txt" >> "$allowed_services"
+
 read -p "Do you want to install local services? [y/n]: " localservices
 if [[ $localservices == "y" ]]; then
     numberinput=-1
@@ -73,6 +79,8 @@ if [[ $localservices == "y" ]]; then
     done
 
     if [[ $numberinput == 1 ]]; then
+        # Asegurarse de que allowed_services termine con una nueva línea
+        sed -i -e '$a\' "$install_dir/ssp_/neccessaryservices/mainservices.txt"
         sudo cp "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" "$allowed_services"
     fi
 fi
