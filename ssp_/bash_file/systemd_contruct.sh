@@ -39,4 +39,3 @@ sudo chmod 644 "/usr/lib/systemd/system/ssp.service"
 $reload_daemon
 $unmask_daemon
 $enable_daemon
-$status_daemon

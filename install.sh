@@ -57,17 +57,6 @@ sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
 # Montar, instalar y documentar
 if [[ ! -f "$service_location/$service_name" ]]; then
     sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
-    if [[ -f $service_location/$service_name ]]; then
-        read -p "Do you want to see ssp status [y/n]: " ssp_status
-        if [[ $ssp_status == "y" ]]; then
-            $status_daemon
-        else
-            echo "Action cancelled."
-        fi
-    else
-        echo "Error while installing, exiting..."
-        exit 2
-    fi
 else
     echo "File already exists, exiting..."
     read -p "Do you want to see ssp status [y/n]: " ssp_status
@@ -125,8 +114,9 @@ sudo chmod 777 "$install_dir_sbin/ssp"
 sudo systemctl daemon-reload
 sudo systemctl restart ssp.service
 
-echo "If service is not running use:"
-echo ""
-echo "sudo systemctl daemon-reload"
-echo "sudo systemctl restart ssp.service"
-echo ""
+read -p "Do you want to see ssp status [y/n]: " ssp_status
+if [[ $ssp_status == "y" ]]; then
+    $status_daemon
+else
+    echo "Action cancelled."
+fi
