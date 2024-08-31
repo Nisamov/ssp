@@ -85,8 +85,10 @@ fi
 
 recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
 
-read -p "Would you want recomended services? [y/n]: " recomendedservices
+read -p "Would you want recommended services? [y/n]: " recomendedservices
 if [[ $recomendedservices == "y" ]]; then
+    # Asegurarse de que allowed_services termine con una nueva línea
+    sed -i -e '$a\' "$allowed_services"
     cat "$recomendedservicesfile" >> "$allowed_services"
 else
     echo "Action cancelled."
