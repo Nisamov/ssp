@@ -64,7 +64,7 @@ fi
 # Creacion de fichero
 sudo touch "$allowed_services"
 # Añadir servicios necesarios al fichero
-cat "$install_dir/ssp_/neccessaryservices/mainservices.txt" >> "$allowed_services"
+cat "$install_dir/ssp_/necessaryservices/mainservices.txt" >> "$allowed_services"
 
 read -p "Do you want to install local services? [y/n]: " localservices
 if [[ $localservices == "y" ]]; then
