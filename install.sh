@@ -106,7 +106,9 @@ sudo chmod 777 "$install_dir_sbin/ssp"
 
 # Recarga del demonio y consejo final
 sudo systemctl daemon-reload
-sudo systemctl restart ssp.service
+sudo systemctl unmask ssp.service
+sudo systemctl enable ssp.service
+sudo systemctl start ssp.service
 
 read -p "Do you want to see ssp status [y/n]: " ssp_status
 if [[ $ssp_status == "y" ]]; then
