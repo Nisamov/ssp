@@ -34,11 +34,11 @@ fi
 # Instalacion de rutas y servicio
 # Montar rutas
 if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
-    sudo mkdir -r "/usr/local/sbin/ssp/"
+    sudo mkdir -p "/usr/local/sbin/ssp/"
 fi
 
 if [[ ! -d "/usr/local/sbin/ssp/py_service" ]]; then
-    sudo mkdir "/usr/local/sbin/ssp/py_service"
+    sudo mkdir -p "/usr/local/sbin/ssp/py_service"
 fi
 
 # CLonar el servicio en la ruta
