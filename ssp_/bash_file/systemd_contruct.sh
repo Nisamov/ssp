@@ -2,11 +2,11 @@
 
 # Spec.0 License 2024 Andres Rulsan Abadias Otal
 
-# Script de generacion de fichero ssp.service
+# Script de generación de archivo ssp.service
 
-# Declaracion variables
-# Recarga, Habilitacion y Estado del demonio
-reload_damon="sudo systemctl daemon-reload"
+# Declaración de variables
+# Recarga, habilitación y estado del demonio
+reload_daemon="sudo systemctl daemon-reload"
 unmask_daemon="sudo systemctl unmask ssp.service"
 enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
@@ -15,26 +15,29 @@ USER=$(whoami)
 GROUP=$(id -gn)
 
 # Generar el archivo ssp.service
-cat <<EOL > /usr/lib/systemd/system/ssp.service
+sudo bash -c "cat <<EOL > /usr/lib/systemd/system/ssp.service
 [Unit]
 Description=Secure System Protocol
-DefaultDependencies=no
 After=local-fs.target
 
 [Service]
-ExecStart=/usr/local/sbin/ssp/py_service/ssp.service.py
+ExecStart=/usr/bin/python3 /usr/local/sbin/ssp/py_service/ssp.service.py
 Restart=always
 User=$USER
 Group=$GROUP
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ssp-service
 
 [Install]
-WantedBy=default.target
-EOL
+WantedBy=multi-user.target
+EOL"
 
 # Permisos
 sudo chmod 644 "/usr/lib/systemd/system/ssp.service"
 
 # Habilitar servicio
-$reload_damon
+$reload_daemon
 $unmask_daemon
 $enable_daemon
+$status_daemon
