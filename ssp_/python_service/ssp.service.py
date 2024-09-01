@@ -33,6 +33,10 @@ def monitor_services():
             if service not in permitted_services:
                 print(f"Servicio no permitido detectado: {service}")
 
+        # Por agregar:
+        # Si hay un servicio no permitido detectado, no solo lo avisa en la consola, sino que lo cierra automaticamente
+
+
         # Esperar un tiempo antes de la siguiente comprobación (5 segundos)
         time.sleep(5)
 

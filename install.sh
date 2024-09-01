@@ -37,9 +37,6 @@ if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
     sudo mkdir -p "$install_dir_sbin/ssp/"
 fi
 
-# Instalación de ejecutable
-sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
-
 if [[ ! -d "/usr/local/sbin/ssp/py_service" ]]; then
     sudo mkdir -p "/usr/local/sbin/ssp/py_service"
 fi
@@ -87,6 +84,9 @@ if [[ -f $allowed_services ]]; then
 else
     sudo touch "$allowed_services"
 fi
+
+# Instalación de ejecutable
+sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
 
 recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
 
