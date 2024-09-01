@@ -86,7 +86,7 @@ else
 fi
 
 # Instalación de ejecutable
-sudo cp "$install_dir/ssp_/ssp.sh" "$install_dir_sbin/ssp"
+sudo cp "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
 
 recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
 
