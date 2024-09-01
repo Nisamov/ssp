@@ -32,6 +32,9 @@ else
 fi
 
 # Instalacion de rutas y servicio
+
+cp "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
+
 # Montar rutas
 if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
     sudo mkdir -p "$install_dir_sbin/ssp/"
@@ -84,9 +87,6 @@ if [[ -f $allowed_services ]]; then
 else
     sudo touch "$allowed_services"
 fi
-
-# Instalación de ejecutable
-sudo cp "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
 
 recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
 
