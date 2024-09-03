@@ -33,7 +33,7 @@ fi
 
 # Instalacion de rutas y servicio
 
-cp "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
+mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
 
 # Montar rutas
 if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
