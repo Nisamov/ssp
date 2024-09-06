@@ -17,5 +17,13 @@ install_dir_sbin="/usr/local/sbin"
 sudo mkdir "$install_dir_bin/ssp"
 echo "$install_dir_bin/ssp"
 
+if [[ -d "$install_dir_bin/ssp" ]]; then
+    echo "ok Dir"
+fi
+
 # Clonacion de fichero ssp.sh
 cp "$install_dir/ssp_/ssp.sh" "$install_dir_bin/ssp"
+
+if [[ -f "$install_dir_bin/ssp" ]]; then
+    echo "ok File"
+fi
