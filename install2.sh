@@ -61,6 +61,7 @@ sudo chmod 777 "/usr/local/sbin/ssp"
 # Instalacion de licencia
 sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md"
 
+echo "Installing main files..."
 # Incrementa el progreso en 10%
 incrementar_progreso 10
 sleep 1  # Simulación del tiempo de ejecución
@@ -72,9 +73,15 @@ sudo mkdir "/usr/local/sbin/ssp_/py_service"
 sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py"
 sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py"
 
+echo "Cloning services..."
 # Incrementa el progreso en 10%
 incrementar_progreso 10
 sleep 1  # Simulación del tiempo de ejecución
 
 # Llamar al generador de servicio
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
+
+echo "Starting service ssp.service..."
+# Incrementa el progreso en 10%
+incrementar_progreso 10
+sleep 1  # Simulación del tiempo de ejecución

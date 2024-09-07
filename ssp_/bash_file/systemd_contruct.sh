@@ -14,7 +14,7 @@ USER=$(whoami)
 GROUP=$(id -gn)
 
 # Ruta del script de servicio Python
-PYTHON_SCRIPT_PATH="/usr/local/sbin/ssp/py_service/ssp.service.py"
+PYTHON_SCRIPT_PATH="/usr/local/sbin/ssp_/py_service/ssp.service.py"
 
 # Verificar que el archivo de script de Python exista
 if [ ! -f "$PYTHON_SCRIPT_PATH" ]; then
