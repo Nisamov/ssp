@@ -14,8 +14,7 @@ function progreso () #crear una funcion (progreso)
 typeset -i i=0
 while [ $i -le "20" ] #creamos el ciclo
 do
-echo -e "\033[44m\033[30m \033[0m \\c" #coloca un espacio en color
-azul que indique la barra de progreso
+echo -e "\033[44m\033[30m \033[0m \\c" #coloca un espacio en color azul que indique la barra de progreso
 sleep 1 #damos un intervalo de 1 seg
 i=i+1
 done
