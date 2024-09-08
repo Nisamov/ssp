@@ -33,7 +33,7 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/usr/local/sbin/ssp/py_service
+WorkingDirectory=/usr/local/sbin/ssp_/py_service
 ExecStart=/usr/bin/python3 $PYTHON_SCRIPT_PATH
 Restart=always
 User=$USER
