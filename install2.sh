@@ -39,49 +39,64 @@ incrementar_progreso() {
     mostrar_barra_progreso
 }
 
-# Limpiar consola
-clear
+clear # Limpiar consola
 
-# Simulación de tareas en el script
-echo "Installing dependences..."
+echo "Installing dependences..." # Simulación de tareas en el script
 sleep 1  # Simulación del tiempo de ejecución
 
 # Creacion de directorios del servicio
-#   Directorio de subprogramas
-sudo mkdir "/usr/local/sbin/ssp_"
-#   Directorio de configuracion
-sudo mkdir "/etc/ssp"
+sudo mkdir "/usr/local/sbin/ssp_" #   Directorio de subprogramas
+sudo mkdir "/etc/ssp" #   Directorio de configuracion
 
-# Instalacion de fichero ejecutable
-sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
+sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp" # Instalacion de fichero ejecutable
 
-# Otorgar permisos al script
-sudo chmod 777 "/usr/local/sbin/ssp"
+sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script
 
-# Instalacion de licencia
-sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md"
+sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md" # Instalacion de licencia
 
 echo "Installing main files..."
-# Incrementa el progreso en 10%
-incrementar_progreso 10
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
 sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
 
-# Creacion de ruta para scripts python
-sudo mkdir "/usr/local/sbin/ssp_/py_service"
+sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
 
-# Clonacion servicio y otorgacion de servicios
-sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py"
+sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
 sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py"
 
 echo "Cloning services..."
-# Incrementa el progreso en 10%
-incrementar_progreso 10
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
 sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
 
-# Llamar al generador de servicio
-sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
+cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
+
+read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
+if [[ $localservices == "y" ]]; then
+    sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+    cat "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" >> "$allowed_services"
+fi
+
+# Proceso de instalacion de servicios por recomendacion
+recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
+read -p "Would you want recommended services? [y/n]: " recomendedservices
+if [[ $recomendedservices == "y" ]]; then
+    # Asegurarse de que allowed_services termine con una nueva línea
+    sed -i -e '$a\' "$allowed_services"
+    cat "$recomendedservicesfile" >> "$allowed_services"
+else
+    echo "Action cancelled."
+fi
+
+sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
 echo "Starting service ssp.service..."
-# Incrementa el progreso en 10%
-incrementar_progreso 10
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
 sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
+
+sudo systemctl daemon-reload # Recargar el demonio
+sudo systemctl unmask ssp.service # Desenmascarar demonio
+sudo systemctl enable ssp.service # Habilitar demonio
+sudo systemctl start ssp.service # Iniciar demonio
+sudo systemctl status ssp.service #Mostrar el estado en el que se encuentra el demonio

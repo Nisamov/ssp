@@ -54,6 +54,3 @@ $reload_daemon
 $unmask_daemon
 $enable_daemon
 $start_daemon
-
-# Mostrar el estado del servicio
-$status_daemon
