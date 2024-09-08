@@ -43,7 +43,6 @@ clear # Limpiar consola
 
 echo "Installing dependences..." # Simulación de tareas en el script
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
-sleep 1  # Simulación del tiempo de ejecución
 clear # Limpiar consola
 
 # Creacion de directorios del servicio
@@ -58,7 +57,6 @@ sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md" # Instalacio
 
 echo "Installing main files..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
-sleep 1  # Simulación del tiempo de ejecución
 clear # Limpiar consola
 
 sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
@@ -68,7 +66,6 @@ sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py"
 
 echo "Cloning services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
-sleep 1  # Simulación del tiempo de ejecución
 clear # Limpiar consola
 
 cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
@@ -92,14 +89,12 @@ fi
 
 echo "Creating service..."
 incrementar_progreso 30 # Incrementa el progreso en 10% | Status actual 60/100
-sleep 1  # Simulación del tiempo de ejecución
 clear # Limpiar consola
 
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
 echo "Starting service ssp.service..."
 incrementar_progreso 40 # Incrementa el progreso en 10% | Status actual 100/100
-sleep 1  # Simulación del tiempo de ejecución
 clear # Limpiar consola
 
 sudo systemctl daemon-reload # Recargar el demonio
