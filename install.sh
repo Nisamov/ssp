@@ -1,95 +1,86 @@
 #!/bin/bash
 
-# Spec.0 License 2024 Andres Rulsan Abadias Otal
+# Modelo 2 instalacion
 
 # Rutas del software
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 service_location="/usr/lib/systemd/system/"
 service_name="ssp.service"
 allowed_services="/etc/ssp/permitted_services.txt"
-install_dir_sbin="/usr/local/sbin"
-
-# Comandos del sistema
+# Gestion del servicio
 reload_daemon="sudo systemctl daemon-reload"
 unmask_daemon="sudo systemctl unmask ssp.service"
 enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
+# Definimos el tamaño total de la barra de progreso
+TOTAL=50
+# Inicializamos la variable progreso
+progreso=0
+# Función para mostrar la barra de progreso
+mostrar_barra_progreso() {
+    # Calcula el número de almohadillas y guiones que se deben mostrar
+    completado=$((progreso * TOTAL / 100))
+    faltante=$((TOTAL - completado))
 
-# Limpiar consola
-clear
+    # Construye la barra de progreso con almohadillas (#) y guiones (-)
+    barra=$(printf "%0.s#" $(seq 1 $completado))
+    barra+=$(printf "%0.s-" $(seq 1 $faltante))
 
-echo ""
-# Para no escribir innecesariamente lineas de codigo
-echo "During installation, if you press any word that is not 'y (yes)', it will cancel the current operation and skip to the next one."
-echo ""
-# Mostrar licencia
-echo "By using the software, you agree to abide by the terms of the Spec.0 License."
-read -p "Do you want to read the full license? [y/n]: " license_bypass
-if [[ $license_bypass == "y" ]]; then
-    sudo less "$install_dir/LICENSE.md"
-else
-    echo "Action cancelled."
-fi
-
-# Instalacion de rutas y servicio
-
-mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp"
-
-# Montar rutas
-if [[ ! -d "/usr/local/sbin/ssp/" ]]; then
-    sudo mkdir -p "$install_dir_sbin/ssp/"
-fi
-
-if [[ ! -d "/usr/local/sbin/ssp/py_service" ]]; then
-    sudo mkdir -p "/usr/local/sbin/ssp/py_service"
-fi
-
-# CLonar el servicio en la ruta
-sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp/py_service/ssp.service.py"
-sudo chmod +x /usr/local/sbin/ssp/py_service/ssp.service.py
-
-# Crear directorio si no existe
-sudo mkdir -p "/etc/ssp"
-
-# Llamar al generador de servicio
-sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
-
-# Montar, instalar y documentar
-if [[ ! -f "$service_location/$service_name" ]]; then
-    sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh"
-fi
-
-# Proceso de instalación de servicios del sistema
-
-cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services"
-
-read -p "Do you want to install local services? [y/n]: " localservices
-if [[ $localservices == "y" ]]; then
-    numberinput=-1
-
-    while [[ $numberinput -ne 1 ]]; do
-        echo "Select your Operative System:"
-        echo "[1] Ubuntu"
-        echo "[-] There are no more Operative Systems at the moment." # Mas adelante esto no sera necesario, porque analizara automaticamente las rutas y segun si existen rutas, detectara el sistema operativo en el que se ejecuta
-        echo ""
-        read -p "Number Input: " numberinput
-    done
-
-    if [[ $numberinput == 1 ]]; then
-        # Asegurarse de que allowed_services termine con una nueva línea
-        sed -i -e '$a\' "$allowed_services"
-        cat "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" >> "$allowed_services"
+    # Muestra la barra de progreso con el porcentaje completado
+    printf "\r[%s] %d%%" "$barra" "$progreso"
+}
+# Función para aumentar el progreso
+incrementar_progreso() {
+    paso=$1
+    progreso=$((progreso + paso))
+    if [ "$progreso" -gt 100 ]; then
+        progreso=100
     fi
+    mostrar_barra_progreso
+}
+
+clear # Limpiar consola
+
+echo "Installing dependences..." # Simulación de tareas en el script
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
+sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
+
+# Creacion de directorios del servicio
+sudo mkdir "/usr/local/sbin/ssp_" #   Directorio de subprogramas
+sudo mkdir "/etc/ssp" #   Directorio de configuracion
+
+sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp" # Instalacion de fichero ejecutable
+
+sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script
+
+sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md" # Instalacion de licencia
+
+echo "Installing main files..."
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
+sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
+
+sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
+
+sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
+sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py"
+
+echo "Cloning services..."
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
+sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
+
+cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
+
+read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
+if [[ $localservices == "y" ]]; then
+    sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+    cat "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" >> "$allowed_services"
 fi
 
-if [[ -f $allowed_services ]]; then
-    echo "File $allowed_services exists"
-else
-    sudo touch "$allowed_services"
-fi
-
+# Proceso de instalacion de servicios por recomendacion
 recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
-
 read -p "Would you want recommended services? [y/n]: " recomendedservices
 if [[ $recomendedservices == "y" ]]; then
     # Asegurarse de que allowed_services termine con una nueva línea
@@ -99,25 +90,22 @@ else
     echo "Action cancelled."
 fi
 
-read -p "Would you like to see current list? [y/n]: " currentlist
-if [[ $currentlist == "y" ]]; then
-    sudo less "$allowed_services"
-else
-    echo "Action cancelled."
-fi
+echo "Creating service..."
+incrementar_progreso 30 # Incrementa el progreso en 10% | Status actual 60/100
+sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
 
-# Permisos
-sudo chmod 777 "$install_dir_sbin/ssp"
+sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
-# Recarga del demonio y consejo final
-sudo systemctl daemon-reload
-sudo systemctl unmask ssp.service
-sudo systemctl enable ssp.service
-sudo systemctl start ssp.service
+echo "Starting service ssp.service..."
+incrementar_progreso 40 # Incrementa el progreso en 10% | Status actual 100/100
+sleep 1  # Simulación del tiempo de ejecución
+clear # Limpiar consola
 
-read -p "Do you want to see ssp status [y/n]: " ssp_status
-if [[ $ssp_status == "y" ]]; then
-    $status_daemon
-else
-    echo "Action cancelled."
-fi
+sudo systemctl daemon-reload # Recargar el demonio
+sudo systemctl unmask ssp.service # Desenmascarar demonio
+sudo systemctl enable ssp.service # Habilitar demonio
+sudo systemctl start ssp.service # Iniciar demonio
+# sudo systemctl status ssp.service #Mostrar el estado en el que se encuentra el demonio
+
+echo "Service installed correctly."
