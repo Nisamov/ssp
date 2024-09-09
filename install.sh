@@ -97,7 +97,7 @@ echo "Loading configuration file..."
 incrementar_progreso 20 # Incrementa el progreso en 20% | Status actual 80/100
 clear # Limpiar consola
 
-sudo mv -r "$install_dir/ssp_/config/" "/etc/ssp/" # Mover directorio con configuracion a /etc/ssp/
+sudo cp -r "$install_dir/ssp_/config" "/etc/ssp/" # Mover directorio con configuracion a /etc/ssp/
 
 echo "Loading daemon..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
