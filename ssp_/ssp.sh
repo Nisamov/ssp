@@ -2,12 +2,6 @@
 
 allowed_services="/etc/ssp/allowed_services.txt"
 
-# Ejemplo de ejcucion:
-# ssp -a -> Añadir servicio
-# ssp -r -> Eliminar servicio
-# ssp -d -> Desinstalar servicio y relacionados
-# ssp -s -> Mostrar servicios permitidos (con less)
-
 if [[ $1 == "-a" || $1 == "--add" ]]; then
     # Confirmacion
     read -p "Are you sure you want to add '$2' to whitelist? [y/n]: " newserviceaccept
