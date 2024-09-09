@@ -98,6 +98,7 @@ incrementar_progreso 20 # Incrementa el progreso en 20% | Status actual 80/100
 clear # Limpiar consola
 
 sudo cp -r "$install_dir/ssp_/config" "/etc/ssp/" # Mover directorio con configuracion a /etc/ssp/
+sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
 
 echo "Loading daemon..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
