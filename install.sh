@@ -13,7 +13,7 @@ unmask_daemon="sudo systemctl unmask ssp.service"
 enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
 # Definimos el tamaño total de la barra de progreso
-TOTAL=50
+TOTAL=100
 # Inicializamos la variable progreso
 progreso=0
 # Función para mostrar la barra de progreso
