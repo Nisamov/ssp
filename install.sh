@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Modelo 2 instalacion
+# Spec.0 License 2024 Andres Rulsan Abadias Otal
 
 # Rutas del software
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 service_location="/usr/lib/systemd/system/"
 service_name="ssp.service"
-allowed_services="/etc/ssp/permitted_services.txt"
+allowed_services="/etc/ssp/allowed_services.txt"
 # Gestion del servicio
 reload_daemon="sudo systemctl daemon-reload"
 unmask_daemon="sudo systemctl unmask ssp.service"
@@ -94,7 +94,7 @@ clear # Limpiar consola
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
 echo "Starting service ssp.service..."
-incrementar_progreso 40 # Incrementa el progreso en 10% | Status actual 100/100
+incrementar_progreso 30 # Incrementa el progreso en 10% | Status actual 90/100
 clear # Limpiar consola
 
 sudo systemctl daemon-reload # Recargar el demonio
@@ -103,4 +103,8 @@ sudo systemctl enable ssp.service # Habilitar demonio
 sudo systemctl start ssp.service # Iniciar demonio
 # sudo systemctl status ssp.service #Mostrar el estado en el que se encuentra el demonio
 
-echo "Service installed correctly."
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 100/100
+clear # Limpiar consola
+
+echo "Service installed correctly" # Mensaje finalizacion de script
+exit 1 # Codigo de salida

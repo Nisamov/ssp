@@ -2,14 +2,14 @@ import subprocess
 import time
 
 # Ruta del archivo de la lista blanca
-whitelist_path = "/etc/ssp/permitted_services.txt"
+whitelist_path = "/etc/ssp/allowed_services.txt"
 
 def read_whitelist():
     """Lee el archivo de la lista blanca y devuelve una lista de servicios permitidos, ignorando líneas que comienzan con '#'."""
     with open(whitelist_path, 'r') as f:
-        permitted_services = [line.strip() for line in f if line.strip() and not line.startswith('#')]
-    print(f"Servicios permitidos leídos: {permitted_services}")  # Depuración
-    return permitted_services
+        allowed_services = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    print(f"Servicios permitidos leídos: {allowed_services}")  # Depuración
+    return allowed_services
 
 def get_active_services():
     """Obtiene la lista de servicios activos en el sistema utilizando el comando 'systemctl'."""
@@ -23,14 +23,14 @@ def monitor_services():
     """Bucle infinito que monitoriza los servicios activos y compara con los servicios permitidos."""
     while True:
         # Leer la lista de servicios permitidos
-        permitted_services = read_whitelist()
+        allowed_services = read_whitelist()
 
         # Obtener la lista de servicios activos
         active_services = get_active_services()
 
         # Comparar servicios activos con la lista blanca
         for service in active_services:
-            if service not in permitted_services:
+            if service not in allowed_services:
                 print(f"Servicio no permitido detectado: {service}")
 
         # Por agregar:
@@ -38,6 +38,7 @@ def monitor_services():
 
 
         # Esperar un tiempo antes de la siguiente comprobación (5 segundos)
+        # Modificar para leer el fichero de configuracion y se adapte a ese tiempo en segundos
         time.sleep(5)
 
 if __name__ == "__main__":
