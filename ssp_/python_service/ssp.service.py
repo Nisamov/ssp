@@ -1,3 +1,5 @@
+# Apache 2.0 License License 2024 Andres Rulsan Abadias Otal
+
 import subprocess
 import time
 

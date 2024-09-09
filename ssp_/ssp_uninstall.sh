@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Spec.0 License 2024 Andres Rulsan Abadias Otal
+# Apache 2.0 License License 2024 Andres Rulsan Abadias Otal
 
 # Script de desinstalacion de servicio
 

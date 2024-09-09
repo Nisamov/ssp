@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Apache 2.0 License License 2024 Andres Rulsan Abadias Otal
+
 # Script de generación de archivo ssp.service
 
 # Recarga, habilitación y estado del demonio
