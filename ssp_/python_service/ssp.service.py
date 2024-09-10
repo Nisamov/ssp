@@ -82,8 +82,8 @@ def read_config():
     time_sleep = 5  # Valor por defecto
     log_level = 'INFO'
     log_dir = '/etc/ssp/logs/'
-    chng_log_interval = 5  # Valor por defecto para cambiar de log cada 5 minutos
-    srvcs_dtnd = 'detention_services'  # Este valor debe ser tomado de la configuración
+    chng_log_interval = 5
+    srvcs_dtnd = 'detention_services'
 
     try:
         with open(config_path, 'r') as f:
