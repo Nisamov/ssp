@@ -44,19 +44,21 @@ incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
 clear # Limpiar consola
 
 # Creacion de directorios del servicio
-sudo mkdir "/usr/local/sbin/ssp_" #   Directorio de subprogramas
-sudo mkdir "/etc/ssp" #   Directorio de configuracion
+sudo mkdir "/usr/local/sbin/ssp_" # Directorio de subprogramas
+sudo mkdir "/etc/ssp" # Directorio de configuracion
 sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp" # Instalacion de fichero ejecutable
 sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md" # Instalacion de licencia
 sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
 sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
-cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
+sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
+sudo mkdir "/etc/ssp/logs" # Creacion de directorio destinado a los logs del servicio
 
 echo "Configuring main files..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
 clear # Limpiar consola
 
-sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script
+sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script ssp
+sudo chmod 777 "/usr/local/sbin/ssp_/ssp_uninstall.sh" # Otorgar permisos al script de desinstalacion
 sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Otorgar permisos al servicio
 
 echo "Configuring local & recommended services..."
