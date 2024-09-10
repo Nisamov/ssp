@@ -12,10 +12,8 @@ reload_daemon="sudo systemctl daemon-reload"
 unmask_daemon="sudo systemctl unmask ssp.service"
 enable_daemon="sudo systemctl enable ssp.service"
 status_daemon="sudo systemctl status ssp.service"
-# Definimos el tamaño total de la barra de progreso
-TOTAL=50
-# Inicializamos la variable progreso
-progreso=0
+TOTAL=50 # Definimos el tamaño total de la barra de progreso
+progreso=0 # Inicializamos la variable progreso
 # Función para mostrar la barra de progreso
 mostrar_barra_progreso() {
     # Calcula el número de almohadillas y guiones que se deben mostrar
@@ -48,27 +46,22 @@ clear # Limpiar consola
 # Creacion de directorios del servicio
 sudo mkdir "/usr/local/sbin/ssp_" #   Directorio de subprogramas
 sudo mkdir "/etc/ssp" #   Directorio de configuracion
-
 sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp" # Instalacion de fichero ejecutable
-
-sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script
-
 sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md" # Instalacion de licencia
+sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
+sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
+cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
 
-echo "Installing main files..."
+echo "Configuring main files..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
 clear # Limpiar consola
 
-sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
+sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script
+sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Otorgar permisos al servicio
 
-sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
-sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py"
-
-echo "Cloning services..."
+echo "Configuring local & recommended services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
 clear # Limpiar consola
-
-cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
 
 read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
@@ -108,8 +101,9 @@ sudo systemctl daemon-reload # Recargar el demonio
 sudo systemctl unmask ssp.service # Desenmascarar demonio
 sudo systemctl enable ssp.service # Habilitar demonio
 sudo systemctl start ssp.service # Iniciar demonio
-# sudo systemctl status ssp.service #Mostrar el estado en el que se encuentra el demonio
+# sudo systemctl status ssp.service # Mostrar el estado en el que se encuentra el demonio
 
+echo "Daemon loaded"
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 100/100
 clear # Limpiar consola
 
