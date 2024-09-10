@@ -60,6 +60,8 @@ clear # Limpiar consola
 sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script ssp
 sudo chmod 777 "/usr/local/sbin/ssp_/ssp_uninstall.sh" # Otorgar permisos al script de desinstalacion
 sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Otorgar permisos al servicio
+sudo mkdir -p /etc/ssp/logs
+sudo chmod 755 /etc/ssp/logs
 
 echo "Configuring local & recommended services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
