@@ -7,7 +7,8 @@ install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 service_location="/usr/lib/systemd/system/"
 service_name="ssp.service"
 allowed_services="/etc/ssp/allowed_services.txt"
-distro=$(lsb_release -a 2>/dev/null | grep "Distributor ID" | awk '{print $3}') # Extraer el Distributor ID y almacenarlo en la variable `distro`
+distro=$(lsb_release -is) # Obtener el Distributor ID
+edition="Unknown" # Inicializar la variable de tipo de edición
 # Gestion del servicio
 reload_daemon="sudo systemctl daemon-reload"
 unmask_daemon="sudo systemctl unmask ssp.service"
@@ -40,8 +41,26 @@ incrementar_progreso() {
 
 clear # Limpiar consola
 
-echo "Installing dependences..." # Simulación de tareas en el script
+echo "Checking OS..." # Simulación de tareas en el script
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
+clear # Limpiar consola
+
+if [[ "$distro" == "Ubuntu" ]]; then
+    # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
+    if dpkg -l | grep -qE "ubuntu-desktop|xserver-xorg"; then
+        edition="Desktop"
+    elif [ -f /etc/cloud/build.info ]; then
+        edition="Server" # Si existe el archivo /etc/cloud/build.info, se considera Server
+    else
+        edition="Server" # Por defecto, se asume Server si no hay entorno gráfico
+    fi
+else
+    echo "It is not an Ubuntu Distro."
+    exit 1
+fi
+
+echo "Installing dependences..." # Simulación de tareas en el script
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
 clear # Limpiar consola
 
 # Creacion de directorios del servicio
@@ -55,7 +74,7 @@ sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_service
 sudo mkdir "/etc/ssp/logs" # Creacion de directorio destinado a los logs del servicio
 
 echo "Configuring main files..."
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
 clear # Limpiar consola
 
 sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script ssp
@@ -65,13 +84,25 @@ sudo mkdir -p /etc/ssp/logs
 sudo chmod 755 /etc/ssp/logs
 
 echo "Configuring local & recommended services..."
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
+incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 40/100
 clear # Limpiar consola
 
 read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
-    sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
-    cat "$install_dir/ssp_/localservices/ubuntu_server/localservices.txt" >> "$allowed_services"
+# Tras haber aceptado los servicios locales, se continua con el proceso de seleccion
+    if [[ $edition == "Server" ]]; then
+    # Si el sistema es ubuntu server
+        sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+        cat "$install_dir/ssp_/localservices/ubuntu_server/localservices.txt" >> "$allowed_services"
+    elif [[ $edition == "Desktop" ]]; then
+    # Si el sistema es ubuntu desktop
+        sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+        cat "$install_dir/ssp_/localservices/ubuntu_desktop/localservices.txt" >> "$allowed_services"
+    else
+        echo "There has been an error during installation."
+        echo "Distro: $distro | Edition: $edition - Has not been found."
+        exit 1
+    fi
 fi
 
 # Proceso de instalacion de servicios por recomendacion
@@ -86,13 +117,13 @@ else
 fi
 
 echo "Creating service..."
-incrementar_progreso 30 # Incrementa el progreso en 10% | Status actual 60/100
+incrementar_progreso 30 # Incrementa el progreso en 10% | Status actual 70/100
 clear # Limpiar consola
 
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
 echo "Loading configuration file..."
-incrementar_progreso 20 # Incrementa el progreso en 20% | Status actual 80/100
+incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 80/100
 clear # Limpiar consola
 
 sudo cp -r "$install_dir/ssp_/config" "/etc/ssp/" # Mover directorio con configuracion a /etc/ssp/
@@ -113,8 +144,4 @@ incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 100/100
 clear # Limpiar consola
 
 echo "Service installed correctly" # Mensaje finalizacion de script
-
-# Imprimir el nombre de la distribución (opcional)
-echo "La distribución del sistema es: $distro"
-
 exit 1 # Codigo de salida
