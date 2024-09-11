@@ -128,8 +128,6 @@ clear # Limpiar consola
 
 sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
 
-python3 "$install_dir/ssp_/python_service/generator.py" # Llamar al generador
-
 echo "Loading daemon..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
 clear # Limpiar consola
