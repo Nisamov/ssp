@@ -93,11 +93,11 @@ if [[ $localservices == "y" ]]; then
     if [[ $edition == "Server" ]]; then
     # Si el sistema es ubuntu server
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
-        cat "$install_dir/ssp_/localservices/ubuntu_server/localservices.txt" >> "$allowed_services"
+        cat "$install_dir/ssp_/localservices/ubuntuserver/localservices.txt" >> "$allowed_services"
     elif [[ $edition == "Desktop" ]]; then
     # Si el sistema es ubuntu desktop
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
-        cat "$install_dir/ssp_/localservices/ubuntu_desktop/localservices.txt" >> "$allowed_services"
+        cat "$install_dir/ssp_/localservices/ubuntudesktop/localservices.txt" >> "$allowed_services"
     else
         echo "There has been an error during installation."
         echo "Distro: $distro | Edition: $edition - Has not been found."
