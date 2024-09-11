@@ -103,11 +103,9 @@ def read_whitelist():
         return []
     
 def read_config():
-    """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging.
-    Si no encuentra un valor necesario, detiene el servicio y termina el programa.
-    """
-    # Inicializar variables de configuración como None
-    time_sleep = None
+    """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging."""    
+    # Valores predeterminados
+    time_sleep = None  
     log_level = None
     log_dir = None
     chng_log_interval = None
@@ -131,32 +129,27 @@ def read_config():
                     elif "srvcs_dtnd=" in line:
                         srvcs_dtnd = line.split('=')[1].strip()
 
-        # Comprobar que todos los valores necesarios están presentes
-        if None in (time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd):
-            print("Error: Faltan valores necesarios en el archivo de configuración.")
-            stop_service("monitor_service")  # Detener el servicio (reemplaza "monitor_service" con el nombre correcto del servicio)
-            exit(1)  # Salir del programa con código de error
+        # Verificar qué valores no se encontraron
+        if time_sleep is None:
+            print("Error: 'time_sleep' no encontrado en el archivo de configuración.")
+        if log_level is None:
+            print("Error: 'log_level' no encontrado en el archivo de configuración.")
+        if log_dir is None:
+            print("Error: 'log_dir' no encontrado en el archivo de configuración.")
+        if chng_log_interval is None:
+            print("Error: 'chng_log_interval' no encontrado en el archivo de configuración.")
+        if srvcs_dtnd is None:
+            print("Error: 'srvcs_dtnd' no encontrado en el archivo de configuración.")
 
-        print("Archivo de configuración leído con éxito.")  # Confirmación de lectura exitosa
+        # Imprimir valores leídos para verificar
+        print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
     except FileNotFoundError:
         print(f"Configuration file not found: {config_path}")  # Mensaje de error si el archivo no se encuentra
-        stop_service("monitor_service")  # Detener el servicio (reemplaza "monitor_service" con el nombre correcto del servicio)
-        exit(1)  # Salir del programa con código de error
     except ValueError as e:
         print(f"Error en el formato del archivo de configuración: {e}")
-        stop_service("monitor_service")  # Detener el servicio (reemplaza "monitor_service" con el nombre correcto del servicio)
-        exit(1)  # Salir del programa con código de error
-
-    # Imprimir valores leídos para verificar
-    print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
     return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
-
-def stop_service(service_name):
-    """Detiene un servicio no permitido y lo registra en el archivo de servicios detenidos."""
-    print(f"Stopping the service: {service_name}")
-    subprocess.run(['systemctl', 'stop', service_name])
 
 def get_active_services():
     """Obtiene la lista de servicios activos en el sistema utilizando el comando 'systemctl'."""
