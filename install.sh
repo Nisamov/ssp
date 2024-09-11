@@ -66,7 +66,7 @@ clear # Limpiar consola
 
 # Creacion de directorios del servicio
 sudo mkdir "/usr/local/sbin/ssp_" # Directorio de subprogramas
-sudo mkdir "/etc/ssp" # Directorio de configuracion
+sudo mkdir "/etc/ssp" # Directorio
 sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp" # Instalacion de fichero ejecutable
 sudo mv "$install_dir/LICENSE.md" "/usr/local/sbin/ssp_/LICENSE.md" # Instalacion de licencia
 sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts python
@@ -87,7 +87,6 @@ sudo chmod 755 "/usr/local/sbin/ssp_/ssp_uninstall.sh" # Otorgar permisos al scr
 sudo mkdir -p /etc/ssp/logs # Crear el directorio /etc/ssp/logs
 sudo chmod 755 /etc/ssp/logs # Otorgar permisos
 sudo chmod 755 /etc/ssp # Otorgar permisos al directorio /etc/ssp
-sudo chmod 644 /etc/ssp/config/ssp_service.conf # Otorgar permisos al fichero de configuracion
 
 echo "Configuring local & recommended services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 40/100
