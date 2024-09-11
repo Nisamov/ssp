@@ -101,6 +101,8 @@ def read_whitelist():
         main_logger.error(f"Whitelist file not found: {whitelist_path}")
         return []
 
+import os
+
 def read_config():
     """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging."""
     # Valores predeterminados
@@ -110,8 +112,17 @@ def read_config():
     chng_log_interval = 5
     srvcs_dtnd = 'detention_services'
 
-    print(f"Intentando leer el archivo de configuración desde: {config_path}")  # Mensaje de depuración
-    print(f"Using configuration file path: {config_path}")  # Debugging message
+    # Mensaje de depuración
+    print(f"Intentando leer el archivo de configuración desde: {config_path}")
+
+    # Verificar existencia del archivo y permisos
+    if not os.path.isfile(config_path):
+        print(f"Archivo no encontrado: {config_path}")
+        return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
+
+    if not os.access(config_path, os.R_OK):
+        print(f"No se puede leer el archivo: {config_path}")
+        return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
     try:
         with open(config_path, 'r') as f:
@@ -124,19 +135,15 @@ def read_config():
                         log_level = line.split('=')[1].strip()
                     elif "log_dir=" in line:
                         log_dir = line.split('=')[1].strip()
-                    elif "chng_log_interval=" in line:  # Cambiado de 'chng_log_file=' a 'chng_log_interval='
+                    elif "chng_log_file=" in line:
                         chng_log_interval = int(line.split('=')[1].strip())
                     elif "srvcs_dtnd=" in line:
                         srvcs_dtnd = line.split('=')[1].strip()
-        print("Archivo de configuración leído con éxito.")  # Confirmación de lectura exitosa
+        print("Archivo de configuración leído con éxito.")
+        print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
-    except FileNotFoundError:
-        print(f"Configuration file not found: {config_path}")  # Mensaje de error si el archivo no se encuentra
-    except ValueError as e:
-        print(f"Error en el formato del archivo de configuración: {e}")
-
-    # Imprimir valores leídos para verificar
-    print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
+    except Exception as e:
+        print(f"Error al leer el archivo de configuración: {e}")
 
     return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
