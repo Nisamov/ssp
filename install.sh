@@ -7,6 +7,7 @@ install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 service_location="/usr/lib/systemd/system/"
 service_name="ssp.service"
 allowed_services="/etc/ssp/allowed_services.txt"
+distro=$(lsb_release -a 2>/dev/null | grep "Distributor ID" | awk '{print $3}') # Extraer el Distributor ID y almacenarlo en la variable `distro`
 # Gestion del servicio
 reload_daemon="sudo systemctl daemon-reload"
 unmask_daemon="sudo systemctl unmask ssp.service"
@@ -70,7 +71,7 @@ clear # Limpiar consola
 read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
     sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
-    cat "$install_dir/ssp_/localservices/ubuntu_/localservices.txt" >> "$allowed_services"
+    cat "$install_dir/ssp_/localservices/ubuntu_server/localservices.txt" >> "$allowed_services"
 fi
 
 # Proceso de instalacion de servicios por recomendacion
@@ -112,4 +113,8 @@ incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 100/100
 clear # Limpiar consola
 
 echo "Service installed correctly" # Mensaje finalizacion de script
+
+# Imprimir el nombre de la distribución (opcional)
+echo "La distribución del sistema es: $distro"
+
 exit 1 # Codigo de salida
