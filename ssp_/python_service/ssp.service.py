@@ -22,20 +22,36 @@ def initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd):
 
     # Crear directorio de logs si no existe
     if not os.path.exists(log_dir):
-        os.makedirs(log_dir, exist_ok=True)
-    
+        try:
+            os.makedirs(log_dir, exist_ok=True)
+            print(f"Log directory created: {log_dir}")
+        except Exception as e:
+            print(f"Failed to create log directory {log_dir}: {e}")
+            return
+
     # Establecer la hora de inicio para el archivo de log
     log_file_start_time = datetime.now()
 
     # Configuración del logger principal
     main_logger = logging.getLogger('MainLogger')
-    main_logger.setLevel(getattr(logging, log_level.upper(), None))
+    main_logger.setLevel(getattr(logging, log_level.upper(), logging.INFO))  # Predeterminado a INFO si no es válido
+
+    # Limpiar manejadores anteriores antes de añadir uno nuevo
+    if main_logger.hasHandlers():
+        main_logger.handlers.clear()
+
+    # Actualizar archivo de log para el logger principal
     update_log_file(log_dir)
 
     # Configuración del logger para servicios detenidos
     detention_log_path = os.path.join(log_dir, f"{srvcs_dtnd}.log")
     detention_logger = logging.getLogger('DetentionLogger')
-    detention_logger.setLevel(getattr(logging, log_level.upper(), None))
+    detention_logger.setLevel(getattr(logging, log_level.upper(), logging.INFO))
+
+    # Limpiar manejadores anteriores antes de añadir uno nuevo
+    if detention_logger.hasHandlers():
+        detention_logger.handlers.clear()
+
     detention_handler = logging.FileHandler(detention_log_path)
     detention_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
     detention_logger.addHandler(detention_handler)
@@ -51,14 +67,19 @@ def update_log_file(log_dir):
     log_path = os.path.join(log_dir, log_filename)
 
     # Crear un nuevo manejador de archivo
-    file_handler = logging.FileHandler(log_path)
-    file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    try:
+        file_handler = logging.FileHandler(log_path)
+        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 
-    # Limpiar manejadores anteriores y añadir el nuevo manejador
-    main_logger.handlers = []
-    main_logger.addHandler(file_handler)
+        # Limpiar manejadores anteriores y añadir el nuevo manejador
+        if main_logger.hasHandlers():
+            main_logger.handlers.clear()
+        main_logger.addHandler(file_handler)
 
-    log_file_start_time = datetime.now()
+        log_file_start_time = datetime.now()
+        print(f"Log file created: {log_path}")
+    except Exception as e:
+        print(f"Failed to create log file {log_path}: {e}")
 
 def check_and_update_log_file(log_dir, chng_log_interval):
     """Verifica si es necesario cambiar el archivo de log cada `chng_log_interval` minutos."""

@@ -78,11 +78,15 @@ echo "Configuring main files..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
 clear # Limpiar consola
 
-sudo chmod 777 "/usr/local/sbin/ssp" # Otorgar permisos al script ssp
-sudo chmod 777 "/usr/local/sbin/ssp_/ssp_uninstall.sh" # Otorgar permisos al script de desinstalacion
-sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Otorgar permisos al servicio
-sudo mkdir -p /etc/ssp/logs
-sudo chmod 755 /etc/ssp/logs
+# Otorgar permisos 755 a todos los directorios y 644 a todos los archivos dentro de /usr/local/sbin/ssp_
+sudo find "/usr/local/sbin/ssp_" -type d -exec chmod 755 {} \;  # Directorios
+sudo find "/usr/local/sbin/ssp_" -type f -exec chmod 644 {} \;  # Archivos
+sudo chmod +x "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Otorgar permisos de ejecución al script de servicio
+sudo chmod 755 "/usr/local/sbin/ssp" # Otorgar permisos al script principal
+sudo chmod 755 "/usr/local/sbin/ssp_/ssp_uninstall.sh" # Otorgar permisos al script de desinstalación
+sudo mkdir -p /etc/ssp/logs # Crear el directorio /etc/ssp/logs
+sudo chmod 755 /etc/ssp/logs # Otorgar permisos
+sudo chmod 755 /etc/ssp # Otorgar permisos al directorio /etc/ssp
 
 echo "Configuring local & recommended services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 40/100
