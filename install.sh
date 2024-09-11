@@ -87,6 +87,7 @@ sudo chmod 755 "/usr/local/sbin/ssp_/ssp_uninstall.sh" # Otorgar permisos al scr
 sudo mkdir -p /etc/ssp/logs # Crear el directorio /etc/ssp/logs
 sudo chmod 755 /etc/ssp/logs # Otorgar permisos
 sudo chmod 755 /etc/ssp # Otorgar permisos al directorio /etc/ssp
+sudo chmod 644 /etc/ssp/config/ssp_service.conf # Otorgar permisos al fichero de configuracion
 
 echo "Configuring local & recommended services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 40/100
