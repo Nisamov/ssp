@@ -1,4 +1,5 @@
 import subprocess
+import configparser
 import time
 import logging
 import os
@@ -100,50 +101,42 @@ def read_whitelist():
     except FileNotFoundError:
         main_logger.error(f"Whitelist file not found: {whitelist_path}")
         return []
-
-import os
-
+    
 def read_config():
     """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging."""
     # Valores predeterminados
-    time_sleep = 5  
+    time_sleep = 5
     log_level = 'INFO'
     log_dir = '/etc/ssp/logs/'
     chng_log_interval = 5
     srvcs_dtnd = 'detention_services'
 
-    # Mensaje de depuración
-    print(f"Intentando leer el archivo de configuración desde: {config_path}")
+    print(f"Intentando leer el archivo de configuración desde: {config_path}")  # Mensaje de depuración
 
-    # Verificar existencia del archivo y permisos
+    config = configparser.ConfigParser()
+    
     if not os.path.isfile(config_path):
-        print(f"Archivo no encontrado: {config_path}")
+        print(f"Configuration file not found: {config_path}")
         return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
-
-    if not os.access(config_path, os.R_OK):
-        print(f"No se puede leer el archivo: {config_path}")
-        return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
-
+    
     try:
-        with open(config_path, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    if "time_sleep=" in line:
-                        time_sleep = int(line.split('=')[1].strip())
-                    elif "log_level=" in line:
-                        log_level = line.split('=')[1].strip()
-                    elif "log_dir=" in line:
-                        log_dir = line.split('=')[1].strip()
-                    elif "chng_log_file=" in line:
-                        chng_log_interval = int(line.split('=')[1].strip())
-                    elif "srvcs_dtnd=" in line:
-                        srvcs_dtnd = line.split('=')[1].strip()
-        print("Archivo de configuración leído con éxito.")
-        print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
+        config.read(config_path)
+        
+        # Verificar si la sección y las opciones existen en el archivo
+        if 'DEFAULT' in config:
+            time_sleep = config.getint('DEFAULT', 'time_sleep', fallback=time_sleep)
+            log_level = config.get('DEFAULT', 'log_level', fallback=log_level)
+            log_dir = config.get('DEFAULT', 'log_dir', fallback=log_dir)
+            chng_log_interval = config.getint('DEFAULT', 'chng_log_file', fallback=chng_log_interval)
+            srvcs_dtnd = config.get('DEFAULT', 'srvcs_dtnd', fallback=srvcs_dtnd)
+        
+        print("Archivo de configuración leído con éxito.")  # Confirmación de lectura exitosa
 
-    except Exception as e:
-        print(f"Error al leer el archivo de configuración: {e}")
+    except configparser.Error as e:
+        print(f"Error en el archivo de configuración: {e}")
+
+    # Imprimir valores leídos para verificar
+    print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
     return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
