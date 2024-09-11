@@ -1,5 +1,4 @@
 import os
-import configparser
 import subprocess
 import time
 import logging
@@ -28,7 +27,7 @@ def initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd):
             print(f"Log directory created: {log_dir}")
         except Exception as e:
             print(f"Failed to create log directory {log_dir}: {e}")
-            return
+            raise  # Lanzar excepción para detener el servicio si no se puede crear el directorio
 
     # Establecer la hora de inicio para el archivo de log
     log_file_start_time = datetime.now()
@@ -81,6 +80,7 @@ def update_log_file(log_dir):
         print(f"Log file created: {log_path}")
     except Exception as e:
         print(f"Failed to create log file {log_path}: {e}")
+        raise  # Lanzar excepción para detener el servicio si no se puede crear el archivo de log
 
 def check_and_update_log_file(log_dir, chng_log_interval):
     """Verifica si es necesario cambiar el archivo de log cada `chng_log_interval` minutos."""
@@ -100,8 +100,8 @@ def read_whitelist():
         return allowed_services
     except FileNotFoundError:
         main_logger.error(f"Whitelist file not found: {whitelist_path}")
-        return []
-    
+        raise  # Lanzar excepción para detener el servicio si el archivo no se encuentra
+
 def read_config():
     """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging."""    
     # Valores predeterminados
@@ -144,10 +144,16 @@ def read_config():
         # Imprimir valores leídos para verificar
         print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
+        # Verificar si todos los valores necesarios están presentes
+        if None in [time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd]:
+            raise ValueError("Uno o más valores necesarios no se encontraron en el archivo de configuración.")
+
     except FileNotFoundError:
         print(f"Configuration file not found: {config_path}")  # Mensaje de error si el archivo no se encuentra
+        raise  # Lanzar excepción para detener el servicio si el archivo no se encuentra
     except ValueError as e:
         print(f"Error en el formato del archivo de configuración: {e}")
+        raise  # Lanzar excepción para detener el servicio si hay un error en los valores
 
     return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
@@ -160,37 +166,50 @@ def get_active_services():
     return active_services
 
 def stop_service(service_name):
-    """Detiene un servicio no permitido y lo registra en el archivo de servicios detenidos."""
+    """Detiene un servicio no permitido y lo registra en el archivo de servicios detenidos."""    
     main_logger.info(f"Stopping the service not allowed: {service_name}")
     detention_logger.warning(f"Service stopped: {service_name}")
-    subprocess.run(['systemctl', 'stop', service_name])
+    subprocess.run(['systemctl', 'stop', service_name], check=True)  # Añadido check=True para manejar errores
 
 def monitor_services():
-    """Bucle infinito que monitorea los servicios activos y los compara con los servicios permitidos."""
+    """Bucle infinito que monitorea los servicios activos y los compara con los servicios permitidos."""    
     # Leer el tiempo de espera y configuración de logging del archivo de configuración
-    time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd = read_config()
+    try:
+        time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd = read_config()
+    except Exception as e:
+        print(f"Error al leer la configuración: {e}")
+        return  # Detener la ejecución si hay un error en la configuración
 
     # Inicializar logging
-    initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd)
+    try:
+        initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd)
+    except Exception as e:
+        print(f"Error al inicializar logging: {e}")
+        return  # Detener la ejecución si hay un error en la inicialización del logging
 
     while True:
-        # Verificar y actualizar el archivo de log si es necesario
-        check_and_update_log_file(log_dir, chng_log_interval)
+        try:
+            # Verificar y actualizar el archivo de log si es necesario
+            check_and_update_log_file(log_dir, chng_log_interval)
 
-        # Leer la lista de servicios permitidos
-        allowed_services = read_whitelist()
+            # Leer la lista de servicios permitidos
+            allowed_services = read_whitelist()
 
-        # Obtener la lista de servicios activos
-        active_services = get_active_services()
+            # Obtener la lista de servicios activos
+            active_services = get_active_services()
 
-        # Comparar servicios activos con la lista blanca
-        for service in active_services:
-            if service not in allowed_services:
-                main_logger.warning(f"Service not allowed detected: {service}")
-                stop_service(service)  # Detener el servicio no permitido
+            # Comparar servicios activos con la lista blanca
+            for service in active_services:
+                if service not in allowed_services:
+                    main_logger.warning(f"Service not allowed detected: {service}")
+                    stop_service(service)  # Detener el servicio no permitido
 
-        # Esperar el tiempo configurado antes de la siguiente comprobación
-        time.sleep(time_sleep)
+            # Esperar el tiempo configurado antes de la siguiente comprobación
+            time.sleep(time_sleep)
+
+        except Exception as e:
+            main_logger.error(f"Error en la monitorización de servicios: {e}")
+            time.sleep(10)  # Esperar un poco antes de reintentar en caso de error
 
 if __name__ == "__main__":
     monitor_services()
