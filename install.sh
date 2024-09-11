@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Apache 2.0 License License 2024 Andres Rulsan Abadias Otal
+# Instalacion compatible con Ubuntu Desktop/Server
 
 # Rutas del software
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"

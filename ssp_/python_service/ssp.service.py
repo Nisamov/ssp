@@ -17,6 +17,9 @@ def initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd):
     """Inicializa la configuración de logging y crea loggers separados para logs generales y servicios detenidos."""
     global main_logger, detention_logger, log_file_start_time
 
+    # Comprobación de los valores de configuración leídos
+    print(f"Initializing logging with log_level: {log_level}, log_dir: {log_dir}")
+
     # Crear directorio de logs si no existe
     if not os.path.exists(log_dir):
         os.makedirs(log_dir, exist_ok=True)
@@ -105,6 +108,9 @@ def read_config():
         print(f"Configuration file not found: {config_path}")
     except ValueError:
         print("Error in timeout format in configuration file.")
+
+    # Imprimir valores leídos para verificar
+    print(f"Read configuration: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
     return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
