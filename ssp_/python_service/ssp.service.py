@@ -111,6 +111,7 @@ def read_config():
     srvcs_dtnd = 'detention_services'
 
     print(f"Intentando leer el archivo de configuración desde: {config_path}")  # Mensaje de depuración
+    print(f"Using configuration file path: {config_path}")  # Debugging message
 
     try:
         with open(config_path, 'r') as f:
