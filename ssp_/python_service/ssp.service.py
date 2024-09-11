@@ -1,31 +1,30 @@
 import os
-import configparser
 import subprocess
 import time
 import logging
 from datetime import datetime, timedelta
 
-# Ruta del archivo de la lista blanca y de configuración
-whitelist_path = "/etc/ssp/allowed_services.txt"
-config_path = "/etc/ssp/config/ssp_service.conf"
+# Valores fijos
+time_sleep = 5  # Tiempo en segundos entre cada chequeo de la lista blanca y los servicios activos
+log_level = 'INFO'
+log_dir = '/etc/ssp/logs'
+chng_log_interval = 5  # Tiempo en minutos entre creación de cada fichero log
+srvcs_dtnd = 'StoppedServices'
+whitelist_path = '/etc/ssp/allowed_services.txt'
 
 # Variables globales para logging
 log_file_start_time = None
 main_logger = None
 detention_logger = None
 
-def initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd):
+def initialize_logging():
     """Inicializa la configuración de logging y crea loggers separados para logs generales y servicios detenidos."""
     global main_logger, detention_logger, log_file_start_time
-
-    # Comprobación de los valores de configuración leídos
-    print(f"Initializing logging with log_level: {log_level}, log_dir: {log_dir}")
 
     # Crear directorio de logs si no existe
     if not os.path.exists(log_dir):
         try:
             os.makedirs(log_dir, exist_ok=True)
-            print(f"Log directory created: {log_dir}")
         except Exception as e:
             print(f"Failed to create log directory {log_dir}: {e}")
             return
@@ -42,7 +41,7 @@ def initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd):
         main_logger.handlers.clear()
 
     # Actualizar archivo de log para el logger principal
-    update_log_file(log_dir)
+    update_log_file()
 
     # Configuración del logger para servicios detenidos
     detention_log_path = os.path.join(log_dir, f"{srvcs_dtnd}.log")
@@ -59,7 +58,7 @@ def initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd):
 
     main_logger.info("Logging initialized")
 
-def update_log_file(log_dir):
+def update_log_file():
     """Actualiza el archivo de log del logger principal según el tiempo actual."""
     global log_file_start_time, main_logger
 
@@ -78,18 +77,17 @@ def update_log_file(log_dir):
         main_logger.addHandler(file_handler)
 
         log_file_start_time = datetime.now()
-        print(f"Log file created: {log_path}")
     except Exception as e:
         print(f"Failed to create log file {log_path}: {e}")
 
-def check_and_update_log_file(log_dir, chng_log_interval):
+def check_and_update_log_file():
     """Verifica si es necesario cambiar el archivo de log cada `chng_log_interval` minutos."""
     global log_file_start_time
 
     # Calcular la diferencia de tiempo
     time_diff = datetime.now() - log_file_start_time
     if time_diff > timedelta(minutes=chng_log_interval):
-        update_log_file(log_dir)
+        update_log_file()
 
 def read_whitelist():
     """Lee el archivo de lista blanca y devuelve una lista de servicios permitidos, ignorando líneas que comienzan con '#'."""
@@ -101,55 +99,6 @@ def read_whitelist():
     except FileNotFoundError:
         main_logger.error(f"Whitelist file not found: {whitelist_path}")
         return []
-    
-def read_config():
-    """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging."""    
-    # Valores predeterminados
-    time_sleep = None  
-    log_level = None
-    log_dir = None
-    chng_log_interval = None
-    srvcs_dtnd = None
-
-    print(f"Intentando leer el archivo de configuración desde: {config_path}")  # Mensaje de depuración
-
-    try:
-        with open(config_path, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    if "time_sleep=" in line:
-                        time_sleep = int(line.split('=')[1].strip())
-                    elif "log_level=" in line:
-                        log_level = line.split('=')[1].strip()
-                    elif "log_dir=" in line:
-                        log_dir = line.split('=')[1].strip()
-                    elif "chng_log_file=" in line:
-                        chng_log_interval = int(line.split('=')[1].strip())
-                    elif "srvcs_dtnd=" in line:
-                        srvcs_dtnd = line.split('=')[1].strip()
-
-        # Verificar qué valores no se encontraron
-        if time_sleep is None:
-            print("Error: 'time_sleep' no encontrado en el archivo de configuración.")
-        if log_level is None:
-            print("Error: 'log_level' no encontrado en el archivo de configuración.")
-        if log_dir is None:
-            print("Error: 'log_dir' no encontrado en el archivo de configuración.")
-        if chng_log_interval is None:
-            print("Error: 'chng_log_interval' no encontrado en el archivo de configuración.")
-        if srvcs_dtnd is None:
-            print("Error: 'srvcs_dtnd' no encontrado en el archivo de configuración.")
-
-        # Imprimir valores leídos para verificar
-        print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
-
-    except FileNotFoundError:
-        print(f"Configuration file not found: {config_path}")  # Mensaje de error si el archivo no se encuentra
-    except ValueError as e:
-        print(f"Error en el formato del archivo de configuración: {e}")
-
-    return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
 def get_active_services():
     """Obtiene la lista de servicios activos en el sistema utilizando el comando 'systemctl'."""
@@ -166,21 +115,12 @@ def stop_service(service_name):
     subprocess.run(['systemctl', 'stop', service_name])
 
 def monitor_services():
-    """Bucle infinito que monitorea los servicios activos y los compara con los servicios permitidos."""    
-    # Leer el tiempo de espera y configuración de logging del archivo de configuración
-    time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd = read_config()
-
-    # Si hay errores en la configuración, salir inmediatamente
-    if any(v is None for v in [time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd]):
-        print("Error: Configuración incompleta. No se puede iniciar el monitor de servicios.")
-        return
-
-    # Inicializar logging
-    initialize_logging(log_level, log_dir, chng_log_interval, srvcs_dtnd)
+    """Bucle infinito que monitorea los servicios activos y los compara con los servicios permitidos."""
+    initialize_logging()
 
     while True:
         # Verificar y actualizar el archivo de log si es necesario
-        check_and_update_log_file(log_dir, chng_log_interval)
+        check_and_update_log_file()
 
         # Leer la lista de servicios permitidos
         allowed_services = read_whitelist()
