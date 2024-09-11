@@ -123,7 +123,7 @@ def read_config():
                         log_level = line.split('=')[1].strip()
                     elif "log_dir=" in line:
                         log_dir = line.split('=')[1].strip()
-                    elif "chng_log_file=" in line:
+                    elif "chng_log_interval=" in line:  # Cambiado de 'chng_log_file=' a 'chng_log_interval='
                         chng_log_interval = int(line.split('=')[1].strip())
                     elif "srvcs_dtnd=" in line:
                         srvcs_dtnd = line.split('=')[1].strip()
