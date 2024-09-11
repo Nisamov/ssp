@@ -103,11 +103,14 @@ def read_whitelist():
 
 def read_config():
     """Lee el archivo de configuración para obtener el tiempo de espera y la configuración de logging."""
-    time_sleep = 5  # Valor por defecto
+    # Valores predeterminados
+    time_sleep = 5  
     log_level = 'INFO'
     log_dir = '/etc/ssp/logs/'
     chng_log_interval = 5
     srvcs_dtnd = 'detention_services'
+
+    print(f"Intentando leer el archivo de configuración desde: {config_path}")  # Mensaje de depuración
 
     try:
         with open(config_path, 'r') as f:
@@ -124,14 +127,15 @@ def read_config():
                         chng_log_interval = int(line.split('=')[1].strip())
                     elif "srvcs_dtnd=" in line:
                         srvcs_dtnd = line.split('=')[1].strip()
+        print("Archivo de configuración leído con éxito.")  # Confirmación de lectura exitosa
 
     except FileNotFoundError:
-        print(f"Configuration file not found: {config_path}")
-    except ValueError:
-        print("Error in timeout format in configuration file.")
+        print(f"Configuration file not found: {config_path}")  # Mensaje de error si el archivo no se encuentra
+    except ValueError as e:
+        print(f"Error en el formato del archivo de configuración: {e}")
 
     # Imprimir valores leídos para verificar
-    print(f"Read configuration: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
+    print(f"Configuración leída: time_sleep={time_sleep}, log_level={log_level}, log_dir={log_dir}, chng_log_interval={chng_log_interval}, srvcs_dtnd={srvcs_dtnd}")
 
     return time_sleep, log_level, log_dir, chng_log_interval, srvcs_dtnd
 
