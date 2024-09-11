@@ -10,11 +10,6 @@ service_name="ssp.service"
 allowed_services="/etc/ssp/allowed_services.txt"
 distro=$(lsb_release -is) # Obtener el Distributor ID
 edition="Unknown" # Inicializar la variable de tipo de edición
-# Gestion del servicio
-reload_daemon="sudo systemctl daemon-reload"
-unmask_daemon="sudo systemctl unmask ssp.service"
-enable_daemon="sudo systemctl enable ssp.service"
-status_daemon="sudo systemctl status ssp.service"
 TOTAL=50 # Definimos el tamaño total de la barra de progreso
 progreso=0 # Inicializamos la variable progreso
 # Función para mostrar la barra de progreso
@@ -131,8 +126,9 @@ echo "Loading configuration file..."
 incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 80/100
 clear # Limpiar consola
 
-sudo cp -r "$install_dir/ssp_/config" "/etc/ssp/" # Mover directorio con configuracion a /etc/ssp/
 sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
+
+python3 "$install_dir/ssp_/python_service/generator.py" # Llamar al generador
 
 echo "Loading daemon..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
