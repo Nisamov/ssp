@@ -53,7 +53,7 @@ sudo mkdir -p /etc/ssp/logs # Crear el directorio /etc/ssp/logs
 sudo chmod 755 /etc/ssp/logs # Otorgar permisos
 sudo chmod 755 /etc/ssp # Otorgar permisos al directorio /etc/ssp
 
-builtin echo "Configuring $localservices & recommended $install_dir/ssp_/recomendedservices/recomended.txt"
+builtin echo "Configuring $allowed_services & recommended $install_dir/ssp_/recomendedservices/recomended.txt"
 
 builtin read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
