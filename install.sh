@@ -12,13 +12,13 @@ install_end="/usr/local/sbin/ssp_"
 
 clear # Limpiar consola
 
-builtin echo "OS:$distro+$edition/:" # Simulación de tareas en el script
+builtin echo "First_Detection-OS:$distro+$edition/:" # Simulación de tareas en el script
 
 if [[ "$distro" == "Ubuntu" ]]; then
     # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
     if dpkg -l | grep -qE "ubuntu-desktop|xserver-xorg"; then
         edition="Desktop"
-    elif dpkg -l | grep -qE "ubuntu-desktop"; then
+    elif [ -f /etc/cloud/cloud.cfg ]; then # Buscar un fichero que exista en ubuntu server
         edition="Server" # Si existe el archivo /etc/cloud/build.info, se considera Server
     else
         edition="Server" # Por defecto, se asume Server si no hay entorno gráfico
@@ -27,6 +27,7 @@ else
     builtin echo "It is not an Ubuntu Distro."
     builtin exit 1
 fi
+builtin echo "OS-Detected:$distro+$edition/:" # Simulación de tareas en el script
 
 builtin echo "Installing dependences from $install_dir" # Simulación de tareas en el script
 
