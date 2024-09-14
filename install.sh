@@ -12,7 +12,7 @@ install_end="/usr/local/sbin/ssp_"
 
 clear # Limpiar consola
 
-builtin echo "Checking OS..." # Simulación de tareas en el script
+builtin echo "OS:$distro+$edition/:" # Simulación de tareas en el script
 
 if [[ "$distro" == "Ubuntu" ]]; then
     # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
