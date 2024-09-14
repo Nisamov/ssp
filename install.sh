@@ -35,7 +35,7 @@ incrementar_progreso() {
 
 clear # Limpiar consola
 
-echo "Checking OS..." # Simulación de tareas en el script
+builtin echo "Checking OS..." # Simulación de tareas en el script
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
 clear # Limpiar consola
 
@@ -49,11 +49,11 @@ if [[ "$distro" == "Ubuntu" ]]; then
         edition="Server" # Por defecto, se asume Server si no hay entorno gráfico
     fi
 else
-    echo "It is not an Ubuntu Distro."
+    builtin echo "It is not an Ubuntu Distro."
     exit 1
 fi
 
-echo "Installing dependences..." # Simulación de tareas en el script
+builtin echo "Installing dependences..." # Simulación de tareas en el script
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
 clear # Limpiar consola
 
@@ -67,7 +67,7 @@ sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/
 sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
 sudo mkdir "/etc/ssp/logs" # Creacion de directorio destinado a los logs del servicio
 
-echo "Configuring main files..."
+builtin echo "Configuring main files..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
 clear # Limpiar consola
 
@@ -81,11 +81,11 @@ sudo mkdir -p /etc/ssp/logs # Crear el directorio /etc/ssp/logs
 sudo chmod 755 /etc/ssp/logs # Otorgar permisos
 sudo chmod 755 /etc/ssp # Otorgar permisos al directorio /etc/ssp
 
-echo "Configuring local & recommended services..."
+builtin echo "Configuring local & recommended services..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 40/100
 clear # Limpiar consola
 
-read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
+builtin read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
 # Tras haber aceptado los servicios locales, se continua con el proceso de seleccion
     if [[ $edition == "Server" ]]; then
@@ -97,15 +97,15 @@ if [[ $localservices == "y" ]]; then
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
         cat "$install_dir/ssp_/localservices/ubuntudesktop/localservices.txt" >> "$allowed_services"
     else
-        echo "There has been an error during installation."
-        echo "Distro: $distro | Edition: $edition - Has not been found."
+        builtin echo "There has been an error during installation."
+        builtin echo "Distro: $distro | Edition: $edition - Has not been found."
         exit 1
     fi
 fi
 
 # Proceso de instalacion de servicios por recomendacion
 recomendedservicesfile="$install_dir/ssp_/recomendedservices/recomended.txt"
-read -p "Would you want recommended services? [y/n]: " recomendedservices
+builtin read -p "Would you want recommended services? [y/n]: " recomendedservices
 if [[ $recomendedservices == "y" ]]; then
     # Asegurarse de que allowed_services termine con una nueva línea
     sed -i -e '$a\' "$allowed_services"
@@ -114,19 +114,19 @@ else
     echo "Action cancelled."
 fi
 
-echo "Creating service..."
+builtin echo "Creating service..."
 incrementar_progreso 20 # Incrementa el progreso en 20% | Status actual 60/100
 clear # Limpiar consola
 
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
-echo "Loading configuration file..."
+builtin echo "Loading configuration file..."
 incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 70/100
 clear # Limpiar consola
 
 sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
 
-echo "Liberating vairables..."
+builtin echo "Liberating vairables..."
 incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 80/100
 clear # Limpiar consola
 
@@ -135,7 +135,7 @@ unset allowed_services # Libera la variable después de usarla
 unset distro # Libera la variable después de usarla
 unset edition # Libera la variable después de usarla
 
-echo "Loading daemon..."
+builtin echo "Loading daemon..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
 clear # Limpiar consola
 
@@ -145,9 +145,9 @@ sudo systemctl enable ssp.service # Habilitar demonio
 sudo systemctl start ssp.service # Iniciar demonio
 # sudo systemctl status ssp.service # Mostrar el estado en el que se encuentra el demonio
 
-echo "Daemon loaded"
+builtin echo "Daemon loaded"
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 100/100
 clear # Limpiar consola
 
-echo "Service installed correctly" # Mensaje finalizacion de script
-exit 1 # Codigo de salida
+builtin echo "Service installed correctly" # Mensaje finalizacion de script
+builtin exit 1 # Codigo de salida
