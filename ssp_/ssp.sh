@@ -23,3 +23,6 @@ elif [[ $1 == "-h" || $1 == "--help" ]]; then
 else
     echo "Use: $0 { -a / --add (Add service to list) | -r / --remove (Remove service from list) | -u / --uninstall (Uninstall software) | -h / --help (show this help)}."
 fi
+
+unset allowed_services # Libera la variable después de usarla
+exit 1

@@ -5,8 +5,6 @@
 
 # Rutas del software
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-service_location="/usr/lib/systemd/system/"
-service_name="ssp.service"
 allowed_services="/etc/ssp/allowed_services.txt"
 distro=$(lsb_release -is) # Obtener el Distributor ID
 edition="Unknown" # Inicializar la variable de tipo de edición
@@ -117,16 +115,25 @@ else
 fi
 
 echo "Creating service..."
-incrementar_progreso 30 # Incrementa el progreso en 10% | Status actual 70/100
+incrementar_progreso 20 # Incrementa el progreso en 20% | Status actual 60/100
 clear # Limpiar consola
 
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
 echo "Loading configuration file..."
-incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 80/100
+incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 70/100
 clear # Limpiar consola
 
 sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
+
+echo "Liberating vairables..."
+incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 80/100
+clear # Limpiar consola
+
+unset install_dir # Libera la variable después de usarla
+unset allowed_services # Libera la variable después de usarla
+unset distro # Libera la variable después de usarla
+unset edition # Libera la variable después de usarla
 
 echo "Loading daemon..."
 incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
