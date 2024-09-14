@@ -8,36 +8,10 @@ install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 allowed_services="/etc/ssp/allowed_services.txt"
 distro=$(lsb_release -is) # Obtener el Distributor ID
 edition="Unknown" # Inicializar la variable de tipo de edición
-TOTAL=50 # Definimos el tamaño total de la barra de progreso
-progreso=0 # Inicializamos la variable progreso
-# Función para mostrar la barra de progreso
-mostrar_barra_progreso() {
-    # Calcula el número de almohadillas y guiones que se deben mostrar
-    completado=$((progreso * TOTAL / 100))
-    faltante=$((TOTAL - completado))
-
-    # Construye la barra de progreso con almohadillas (#) y guiones (-)
-    barra=$(printf "%0.s#" $(seq 1 $completado))
-    barra+=$(printf "%0.s-" $(seq 1 $faltante))
-
-    # Muestra la barra de progreso con el porcentaje completado
-    printf "\r[%s] %d%%" "$barra" "$progreso"
-}
-# Función para aumentar el progreso
-incrementar_progreso() {
-    paso=$1
-    progreso=$((progreso + paso))
-    if [ "$progreso" -gt 100 ]; then
-        progreso=100
-    fi
-    mostrar_barra_progreso
-}
 
 clear # Limpiar consola
 
 builtin echo "Checking OS..." # Simulación de tareas en el script
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 10/100
-clear # Limpiar consola
 
 if [[ "$distro" == "Ubuntu" ]]; then
     # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
@@ -54,8 +28,6 @@ else
 fi
 
 builtin echo "Installing dependences..." # Simulación de tareas en el script
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 20/100
-clear # Limpiar consola
 
 # Creacion de directorios del servicio
 sudo mkdir "/usr/local/sbin/ssp_" # Directorio de subprogramas
@@ -68,8 +40,6 @@ sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_service
 sudo mkdir "/etc/ssp/logs" # Creacion de directorio destinado a los logs del servicio
 
 builtin echo "Configuring main files..."
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 30/100
-clear # Limpiar consola
 
 # Otorgar permisos 755 a todos los directorios y 644 a todos los archivos dentro de /usr/local/sbin/ssp_
 sudo find "/usr/local/sbin/ssp_" -type d -exec chmod 755 {} \;  # Directorios
@@ -82,8 +52,6 @@ sudo chmod 755 /etc/ssp/logs # Otorgar permisos
 sudo chmod 755 /etc/ssp # Otorgar permisos al directorio /etc/ssp
 
 builtin echo "Configuring local & recommended services..."
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 40/100
-clear # Limpiar consola
 
 builtin read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
@@ -115,20 +83,14 @@ else
 fi
 
 builtin echo "Creating service..."
-incrementar_progreso 20 # Incrementa el progreso en 20% | Status actual 60/100
-clear # Limpiar consola
 
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
 
 builtin echo "Loading configuration file..."
-incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 70/100
-clear # Limpiar consola
 
 sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
 
 builtin echo "Liberating vairables..."
-incrementar_progreso 10 # Incrementa el progreso en 20% | Status actual 80/100
-clear # Limpiar consola
 
 unset install_dir # Libera la variable después de usarla
 unset allowed_services # Libera la variable después de usarla
@@ -136,8 +98,6 @@ unset distro # Libera la variable después de usarla
 unset edition # Libera la variable después de usarla
 
 builtin echo "Loading daemon..."
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 90/100
-clear # Limpiar consola
 
 sudo systemctl daemon-reload # Recargar el demonio
 sudo systemctl unmask ssp.service # Desenmascarar demonio
@@ -146,8 +106,7 @@ sudo systemctl start ssp.service # Iniciar demonio
 # sudo systemctl status ssp.service # Mostrar el estado en el que se encuentra el demonio
 
 builtin echo "Daemon loaded"
-incrementar_progreso 10 # Incrementa el progreso en 10% | Status actual 100/100
-clear # Limpiar consola
 
+builtin clear # Limpiar consola
 builtin echo "Service installed correctly" # Mensaje finalizacion de script
 builtin exit 1 # Codigo de salida
