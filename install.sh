@@ -38,6 +38,7 @@ sudo mkdir "/usr/local/sbin/ssp_/py_service" # Creacion de ruta para scripts pyt
 sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "/usr/local/sbin/ssp_/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
 sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
 sudo mkdir "/etc/ssp/logs" # Creacion de directorio destinado a los logs del servicio
+sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_/" # Clona el fichero de desinstalacion
 
 builtin echo "Configuring main files..."
 
@@ -88,8 +89,6 @@ sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generado
 
 builtin echo "Loading configuration file..."
 
-sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "/usr/local/sbin/ssp_"
-
 builtin echo "Liberating vairables..."
 
 unset install_dir # Libera la variable después de usarla
@@ -107,6 +106,6 @@ sudo systemctl start ssp.service # Iniciar demonio
 
 builtin echo "Daemon loaded"
 
-builtin clear # Limpiar consola
+clear # Limpiar consola
 builtin echo "Service installed correctly" # Mensaje finalizacion de script
 builtin exit 1 # Codigo de salida
