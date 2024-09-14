@@ -50,7 +50,7 @@ if [[ "$distro" == "Ubuntu" ]]; then
     fi
 else
     builtin echo "It is not an Ubuntu Distro."
-    exit 1
+    builtin exit 1
 fi
 
 builtin echo "Installing dependences..." # Simulación de tareas en el script
@@ -99,7 +99,7 @@ if [[ $localservices == "y" ]]; then
     else
         builtin echo "There has been an error during installation."
         builtin echo "Distro: $distro | Edition: $edition - Has not been found."
-        exit 1
+        builtin exit 1
     fi
 fi
 
@@ -111,7 +111,7 @@ if [[ $recomendedservices == "y" ]]; then
     sed -i -e '$a\' "$allowed_services"
     cat "$recomendedservicesfile" >> "$allowed_services"
 else
-    echo "Action cancelled."
+    builtin echo "Action cancelled."
 fi
 
 builtin echo "Creating service..."

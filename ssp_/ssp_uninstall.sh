@@ -20,5 +20,5 @@ unset service_location # Libera la variable después de usarla
 unset etc_content # Libera la variable después de usarla
 unset sbin_content # Libera la variable después de usarla
 
-echo "Uninstallation complete."
-exit 1
+builtin echo "Uninstallation complete."
+builtin exit 1
