@@ -70,7 +70,7 @@ if [[ $localservices == "y" ]]; then
     # Si el sistema es ubuntu desktop
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
         cat "$install_dir/ssp_/localservices/ubuntudesktop/localservices.txt" >> "$allowed_services" # Agrega los servicios de ubuntu desktop
-    elif [[ $distro == "Kali"]]; then
+    elif [[ $distro == "Kali" ]]; then
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
         cat "$install_dir/ssp_/localservices/kalilinux/localservices.txt" >> "$allowed_services" # Agrega los servicios de Kali linux
     else
