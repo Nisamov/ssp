@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Apache 2.0 License License 2024 Andres Rulsan Abadias Otal
-# Instalacion compatible con Ubuntu Desktop/Server
+# Instalacion compatible con Ubuntu Desktop/Server, Kali Linux
 
 # Rutas del software
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -62,14 +62,17 @@ builtin echo "Configuring $allowed_services & recommended $install_dir/ssp_/reco
 builtin read -p "Do you want to install local services? [y/n]: " localservices # Proceso de instalacion de servicios locales (Para ubuntu)
 if [[ $localservices == "y" ]]; then
 # Tras haber aceptado los servicios locales, se continua con el proceso de seleccion
-    if [[ $edition == "Server" ]]; then
+    if [[ $distro == "Ubuntu" && $edition == "Server" ]]; then
     # Si el sistema es ubuntu server
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
-        cat "$install_dir/ssp_/localservices/ubuntuserver/localservices.txt" >> "$allowed_services"
-    elif [[ $edition == "Desktop" ]]; then
+        cat "$install_dir/ssp_/localservices/ubuntuserver/localservices.txt" >> "$allowed_services" # Agrega los servicios de ubuntu server
+    elif [[ $distro == "Ubuntu" && $edition == "Desktop" ]]; then
     # Si el sistema es ubuntu desktop
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
-        cat "$install_dir/ssp_/localservices/ubuntudesktop/localservices.txt" >> "$allowed_services"
+        cat "$install_dir/ssp_/localservices/ubuntudesktop/localservices.txt" >> "$allowed_services" # Agrega los servicios de ubuntu desktop
+    elif [[ $distro == "Kali"]]; then
+        sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+        cat "$install_dir/ssp_/localservices/kalilinux/localservices.txt" >> "$allowed_services" # Agrega los servicios de Kali linux
     else
         builtin echo "There has been an error during installation."
         builtin echo "Distro: $distro | Edition: $edition - Has not been found."
