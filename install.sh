@@ -12,8 +12,6 @@ install_end="/usr/local/sbin/ssp_"
 
 clear # Limpiar consola
 
-builtin echo "First_Detection-OS:$distro+$edition/:" # Simulación de tareas en el script
-
 if [[ "$distro" == "Ubuntu" ]]; then
     # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
     if dpkg -l | grep -qE "ubuntu-desktop|xserver-xorg"; then
@@ -25,9 +23,14 @@ if [[ "$distro" == "Ubuntu" ]]; then
     fi
 else
     builtin echo "It is not an Ubuntu Distro."
-    builtin exit 1
+    read -p "Do you want to continue the installation anyways? [y/n]: " keepinstalling
+    if [[ $keepinstalling == "y" ]]; then
+        builtin echo "Installing for $distro+$edition..."
+    else
+        builtin exit 1
+    fi
 fi
-builtin echo "OS-Detected:$distro+$edition/:" # Simulación de tareas en el script
+builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
 
 builtin echo "Installing dependences from $install_dir" # Simulación de tareas en el script
 
