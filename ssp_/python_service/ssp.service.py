@@ -9,7 +9,7 @@ time_sleep = 3  # Tiempo en segundos entre cada chequeo de la lista blanca y los
 log_level = 'INFO'
 log_dir = '/etc/ssp/logs'
 chng_log_interval = 5  # Tiempo en minutos entre creación de cada fichero log
-srvcs_dtnd = '.services_detected.log'
+srvcs_dtnd = '.services_unabled'
 whitelist_path = '/etc/ssp/allowed_services.txt'
 
 # Variables globales para logging
