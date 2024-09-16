@@ -78,6 +78,10 @@ if [[ $localservices == "y" ]]; then
     elif [[ $distro == "Debian" ]]; then
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
         cat "$install_dir/ssp_/localservices/debian/localservices.txt" >> "$allowed_services" # Agrega los servicios de Debian
+
+        sudo export PATH=$PATH:/usr/local/sbin # Añadir /usr/local/sbin al PATH del usuario
+        sudo alias ssp="sudo bash /usr/local/sbin/ssp" # Crear un alias para simplificar el comando
+        source ~/.bashrc # Aplicar los cambios
     else
         builtin echo "There has been an error during installation."
         builtin echo "Distro: $distro | Edition: $edition - Has not been found."
