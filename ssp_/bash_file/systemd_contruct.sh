@@ -15,17 +15,20 @@ start_daemon="sudo systemctl start ssp.service"
 USER=$(whoami)
 GROUP=$(id -gn)
 
+gcc -o /usr/local/sbin/ssp_/service/ssp.service /usr/local/sbin/ssp_/service/ssp.service.c # Compilar servicio
+mv "/usr/local/sbin/ssp_/service/ssp.service.c" "/usr/local/sbin/ssp_/service/ssp.service" # Renombrar fichero
+
 # Ruta del script de servicio Python
-PYTHON_SCRIPT_PATH="/usr/local/sbin/ssp_/py_service/ssp.service.py"
+service_path="/usr/local/sbin/ssp_/service/ssp.service"
 
 # Verificar que el archivo de script de Python exista
-if [ ! -f "$PYTHON_SCRIPT_PATH" ]; then
-    echo "Error: El archivo $PYTHON_SCRIPT_PATH no existe."
+if [ ! -f "$service_path" ]; then
+    echo "Error: El archivo $service_path no existe."
     exit 1
 fi
 
 # Asegurarse de que el script de Python sea ejecutable
-sudo chmod +x "$PYTHON_SCRIPT_PATH"
+sudo chmod +x "$service_path"
 
 # Generar el archivo ssp.service
 sudo bash -c "cat <<EOL > /usr/lib/systemd/system/ssp.service
@@ -35,8 +38,8 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/usr/local/sbin/ssp_/py_service
-ExecStart=/usr/bin/python3 $PYTHON_SCRIPT_PATH
+WorkingDirectory=/usr/local/sbin/ssp_/service
+ExecStart=/usr/local/sbin/ssp_/service/ssp.service
 Restart=always
 User=$USER
 Group=$GROUP
