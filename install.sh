@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Apache 2.0 License License 2024 Andres Rulsan Abadias Otal
-# Instalacion compatible con Ubuntu Desktop/Server, Kali Linux
+# Instalacion compatible con Ubuntu Desktop/Server, Kali Linux y Debian
 
 # Rutas del software
 install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -73,6 +73,9 @@ if [[ $localservices == "y" ]]; then
     elif [[ $distro == "Kali" ]]; then
         sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
         cat "$install_dir/ssp_/localservices/kalilinux/localservices.txt" >> "$allowed_services" # Agrega los servicios de Kali linux
+    elif [[ $distro == "Debian" ]]; then
+        sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+        cat "$install_dir/ssp_/localservices/debian/localservices.txt" >> "$allowed_services" # Agrega los servicios de Debian
     else
         builtin echo "There has been an error during installation."
         builtin echo "Distro: $distro | Edition: $edition - Has not been found."
