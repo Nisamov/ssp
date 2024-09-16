@@ -12,25 +12,34 @@ install_end="/usr/local/sbin/ssp_"
 
 clear # Limpiar consola
 
-if [[ "$distro" == "Ubuntu" ]]; then
-    # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
-    if dpkg -l | grep -qE "ubuntu-desktop|xserver-xorg"; then
-        edition="Desktop"
-        builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
-    elif [ -f /etc/cloud/cloud.cfg ]; then # Buscar un fichero que exista en ubuntu server
-        edition="Server" # Si existe el archivo /etc/cloud/build.info, se considera Server
-        builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
-    else
-        edition="Server" # Por defecto, se asume Server si no hay entorno gráfico
-    fi
-else
+if [[ "$distro" != "Ubuntu" && "$distro" != "Debian" && "$distro" != "Kali" ]]; then
     builtin echo "OS-Detected:$distro/, SSP is currently compatible with Ubuntu Desktop/Server, Kali & Debian." # Muestra de distribucion
     read -p "Do you want to continue the installation anyways? [y/n]: " keepinstalling
     if [[ $keepinstalling == "y" ]]; then
-        builtin echo "Installing for $distro+$edition..."
+        builtin echo "Installing for $distro..."
     else
         builtin echo "Installation stopped."
         builtin exit 1
+    fi
+else
+    if [[ "$distro" == "Ubuntu" ]]; then
+    # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
+        if dpkg -l | grep -qE "ubuntu-desktop|xserver-xorg"; then
+            edition="Desktop"
+            builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
+        elif [ -f /etc/cloud/cloud.cfg ]; then # Buscar un fichero que exista en ubuntu server
+            edition="Server" # Si existe el archivo /etc/cloud/build.info, se considera Server
+            builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
+        else
+            edition="Server" # Por defecto, se asume Server si no hay entorno gráfico
+            builtin echo "OS-Detected:$distro+$edition/: -- It is an unknown edition." # Muestra de distribucion + edicion
+        fi
+    elif [[ "$distro" == "Debian" ]]; then
+        builtin echo "OS-Detected:$distro/:" # Muestra de distribucion
+    elif [[ "$distro" == "Kali" ]]; then
+        builtin echo "OS-Detected:$distro/:" # Muestra de distribucion
+    else
+        builtin echo "There was something wrong about '$distro+$edition'."
     fi
 fi
 
