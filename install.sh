@@ -16,21 +16,23 @@ if [[ "$distro" == "Ubuntu" ]]; then
     # Comprobar si el paquete ubuntu-desktop o xserver-xorg está instalado
     if dpkg -l | grep -qE "ubuntu-desktop|xserver-xorg"; then
         edition="Desktop"
+        builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
     elif [ -f /etc/cloud/cloud.cfg ]; then # Buscar un fichero que exista en ubuntu server
         edition="Server" # Si existe el archivo /etc/cloud/build.info, se considera Server
+        builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
     else
         edition="Server" # Por defecto, se asume Server si no hay entorno gráfico
     fi
 else
-    builtin echo "It is not an Ubuntu Distro."
+    builtin echo "OS-Detected:$distro/, SSP is currently compatible with Ubuntu Desktop/Server, Kali & Debian." # Muestra de distribucion
     read -p "Do you want to continue the installation anyways? [y/n]: " keepinstalling
     if [[ $keepinstalling == "y" ]]; then
         builtin echo "Installing for $distro+$edition..."
     else
+        builtin echo "Installation stopped."
         builtin exit 1
     fi
 fi
-builtin echo "OS-Detected:$distro+$edition/:" # Muestra de distribucion + edicion
 
 builtin echo "Installing dependences from $install_dir" # Simulación de tareas en el script
 
