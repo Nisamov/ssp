@@ -44,14 +44,14 @@ else
 fi
 
 builtin echo "Installing dependences from $install_dir" # Simulación de tareas en el script
-
+sudo apt install gcc # Instalacion de compilador para c
 # Creacion de directorios del servicio
 sudo mkdir "$install_end" # Directorio de subprogramas
 sudo mkdir "/etc/ssp" # Directorio
 sudo mv "$install_dir/ssp_/ssp.sh" "/usr/local/sbin/ssp" # Instalacion de fichero ejecutable
 sudo mv "$install_dir/LICENSE.md" "$install_end/LICENSE.md" # Instalacion de licencia
-sudo mkdir "$install_end/py_service" # Creacion de ruta para scripts python
-sudo cp "$install_dir/ssp_/python_service/ssp.service.py" "$install_end/py_service/ssp.service.py" # Clonacion servicio y otorgacion de servicios
+sudo mkdir "$install_end/service" # Creacion de ruta para scripts python
+sudo cp "$install_dir/ssp_/service/ssp.service" "$install_end/service/ssp.service" # Clonacion servicio y otorgacion de servicios
 sudo cp "$install_dir/ssp_/necessaryservices/mainservices.txt" "$allowed_services" # Proceso de instalación de servicios obligatorios para del sistema
 sudo mkdir "/etc/ssp/logs" # Creacion de directorio destinado a los logs del servicio
 sudo cp "$install_dir/ssp_/ssp_uninstall.sh" "$install_end/" # Clona el fichero de desinstalacion
@@ -61,7 +61,7 @@ builtin echo "Configuring main files in $install_end"
 # Otorgar permisos 755 a todos los directorios y 644 a todos los archivos dentro de /usr/local/sbin/ssp_
 sudo find "$install_end" -type d -exec chmod 755 {} \;  # Directorios
 sudo find "$install_end" -type f -exec chmod 644 {} \;  # Archivos
-sudo chmod +x "$install_end/py_service/ssp.service.py" # Otorgar permisos de ejecución al script de servicio
+sudo chmod +x "$install_end/service/ssp.service" # Otorgar permisos de ejecución al script de servicio
 sudo chmod 755 "/usr/local/sbin/ssp" # Otorgar permisos al script principal
 sudo chmod 755 "$install_end/ssp_uninstall.sh" # Otorgar permisos al script de desinstalación
 sudo mkdir -p /etc/ssp/logs # Crear el directorio /etc/ssp/logs
