@@ -106,6 +106,16 @@ else
     builtin echo "Action cancelled."
 fi
 
+# Servicios para VBox
+vboxservicesfile="$install_dir/ssp_/virtualboxservices/vbservices.txt"
+builtin read -p "Would you want Virtual Box Services? [y/n]: " vboxservices
+if [[ $vboxservices == "y" ]]; then
+    sed -i -e '$a\' "$allowed_services" # Asegurarse de que allowed_services termine con una nueva línea
+    cat "$vboxservicesfile" >> "$allowed_services" # Agregar contenido de vbservices a fichero
+else
+    builtin echo "Action cancelled."
+fi
+
 builtin echo "Creating service with $install_dir/ssp_/bash_file/systemd_contruct.sh"
 
 sudo bash "$install_dir/ssp_/bash_file/systemd_contruct.sh" # Llamar al generador de servicio
