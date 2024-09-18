@@ -127,6 +127,11 @@ unset allowed_services # Libera la variable después de usarla
 unset distro # Libera la variable después de usarla
 unset edition # Libera la variable después de usarla
 unset install_end # Libera la variable después de usarla
+unset localservices # Libera la variable después de usarla
+unset recomendedservicesfile # Libera la variable después de usarla
+unset recomendedservices # Libera la variable después de usarla
+unset vboxservicesfile # Libera la variable después de usarla
+unset vboxservices # Libera la variable después de usarla
 
 builtin echo "Loading daemon..."
 
@@ -134,7 +139,7 @@ sudo systemctl daemon-reload # Recargar el demonio
 sudo systemctl unmask ssp.service # Desenmascarar demonio
 sudo systemctl enable ssp.service # Habilitar demonio
 sudo systemctl start ssp.service # Iniciar demonio
-# sudo systemctl status ssp.service # Mostrar el estado en el que se encuentra el demonio
+# sudo systemctl status ssp.service # Mostrar el estado en el que se encuentra el demonio | Deshabilitado
 
 builtin echo "Daemon loaded"
 
