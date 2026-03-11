@@ -92,30 +92,38 @@ EOF
 
 show_help_extend() {
     cat <<EOF
-Opciones disponibles:
-  -h, --help      >     Mostrar esta ayuda
-    (victrix -h || victrix --help)
-  -hx,--help-extend     Mostrar ayuda extendida
-    (victrix -hx || victrix --help-extend)
-  -v, --version   >     Mostrar versión
-    (victrix -v || victrix --version)
-  -c, --config    >     Editar el fichero de configuración (/etc/victrix/victrix.conf)
-    (victrix -c || victrix --config)
-  -l, --logs      >     Listar el directorio de logs ($LOG_DIR)
-    (victrix -l || victrix --logs)
-  -d. --download  >     Actualizar los ficheros (descargar cambios de github)
-    (victrix -d || victrix --download)
-  -u, --uninstall >     Desinstala el servicio y archivos relacionados
-    (victrix -u || victrix --uninstall)
-  -g, --git       >     Descargar repositorio de github
-    -source repo_name       > Descargar desde el repositorio del autor
-        Ejemplo: 'victrix -g -source LinuxCommands'
-    -nown author/repo_name  > Descargar desde repositorio externo
-        Ejemplo: 'victrix -g -nown user/radrepo'
-  -pop, --popcat  >     Reproducir popcat en ascii
-    (victrix -pop || victrix -popcat)
-  man             >     Abre el manual
-    (victrix man || man victrix)
+Opciones diponibles:
+├── -h, --help
+│    └── "Mostrar esta ayuda"
+│        (victrix -h || victrix --help)
+├── -hx, --help-extend
+│    └── "Mostrar ayuda extendida"
+│        (victrix -hx || victrix --help-extend)
+├── -v, --version
+│    └── "Mostrar versión"
+│        (victrix -v || victrix --version)
+├── -c, --config
+│    └── "Editar el fichero de configuración"
+│        (/etc/victrix/victrix.conf)
+├── -l, --logs
+│    └── "Listar el directorio de logs" ($LOG_DIR)
+├── -d, --download
+│    └── "Actualizar los ficheros" (Descargar cambios de GitHub)
+├── -u, --uninstall
+│    └── "Desinstala el servicio y archivos relacionados"
+├── -g, --git
+│    ├── -source repo_name
+│    │     └── "Descargar desde el repositorio del autor"
+│    │         (victrix -g -source LinuxCommands)
+│    └── -nown author/repo_name
+│          └── "Descargar desde repositorio externo"
+│              (victrix -g -nown user/radrepo)
+├── -pop, --popcat
+│    └── "Reproducir popcat en ascii"
+│        (victrix -pop || victrix -popcat)
+└── man
+     └── "Abre el manual"
+         (victrix man || man victrix)
 EOF
 }
 

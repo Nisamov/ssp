@@ -1,46 +1,31 @@
-![Presetación Servicio](_repo/_media/victrix.png)
-
-# Secure Service Protocol
+# Victrix
 Servicio dedicado para ubuntu en proceso de configuracion
 
 ## Instalación
+Para descargar el software, ve a [releases](https://github.com/Nisamov/victrix/releases) y descarga el paquete en el equipo.
 
-Para descargar el software, ve a [releases](https://github.com/Nisamov/victrix/releases) y descárgate el paquete en el equipo, o ejecuta el siguiente comando desde la terminal:
+![Instalacion de Repositorio](_repo/_media/neg.png)
 ```sh
-sudo apt install git -y && git clone https://github.com/Nisamov/victrix
-```
-
-![Instalacion de Repositorio](_repo/_media/paso_sub1.png)
-
-Con el repositorio descargado, ejecuta el siguiente comando (ruta relativa):
-```sh
-sudo chmod 0755 victrix/DEBIAN/*
-```
-Los permisos deberian ser 0755 [0 usuario permisos rxw, 5 de grupos y 5 para otros]
-
-Ahora monta el paquete `.deb`con:
-```sh
-dpkg-deb --build mi-paquete nombre-del-paquete.deb
-```
-
-Para instalarlo asegúrate de haberte descargado el fichero `.deb`del repositorio.
-Tras descargarlo, ubicate en la ruta del fichero y ejecuta el siguiente comando:
-```sh
-sudo dpkg -i fichero.deb
-```
-
-Finalmente iniciamos el servicio con:
-```sh
-sudo systemctl start victrix.service
-```
-Y revisamos su estado con:
-```sh
+# Clonar el repositorio
+git clone "https://github.com/Nisamov/victrix" && cd victrix
+# Configurar permisos de los scripts de control del paquete
+sudo chmod 0755 DEBIAN/postinst DEBIAN/prerm 2>/dev/null || chmod -R 0755 DEBIAN/
+# Construir el paquete .deb (Subiendo un nivel para empaquetar la carpeta)
+cd ..
+dpkg-deb --build victrix victrix_1.0_all.deb
+# Instalar el paquete generado
+sudo dpkg -i victrix_1.0_all.deb
+# Gestionar el servicio (no debería ser necesario)
+	#sudo systemctl daemon-reload
+	#sudo systemctl enable victrix.service
+	#sudo systemctl start victrix.service
+# Verificar estado
 sudo systemctl status victrix.service
 ```
-
-Si se realiza algún cambio durante su ejecución, se recomienda reiniciar el servicio:
+![Instalacion de Repositorio](_repo/_media/oneliner.png)
+Oneliner:
 ```sh
-sudo systemctl restart victrix.service
+curl -s https://api.github.com/repos/Nisamov/victrix/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi - -O victrix.deb && sudo apt install ./victrix.deb -y
 ```
 
 ## Rutas
@@ -64,8 +49,8 @@ set intervalo 10
 victrix
 ├── _repo
 │   └── _media
-│       ├── paso_sub1.png
-│       └── SecureServiceProtocol.jpg
+│       ├── neg.png
+│       └── victrix.png
 ├── .github
 │   ├── workflows
 │   │   └── build_deb.yml
@@ -90,6 +75,10 @@ victrix
 │   │   │   │   ├── f2.tcl
 │   │   │   │   ├── f3.tcl
 │   │   │   │   └── f4.tcl
+│   │   │   ├── motion
+│   │   │   │   └── popcat
+│   │   │   │       ├── nf.txt
+│   │   │   │       └── ns.txt
 │   │   │   └── main.tcl
 │   │   └── victrix
 │   └── share
