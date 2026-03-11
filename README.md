@@ -25,7 +25,7 @@ sudo systemctl status victrix.service
 ![Instalacion de Repositorio](_repo/_media/oneliner.png)
 Oneliner:
 ```sh
-curl -s https://api.github.com/repos/Nisamov/victrix/releases/latest | grep "browser_download_url.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi - -O victrix.deb && sudo apt install ./victrix.deb -y
+curl -s https://api.github.com/repos/Nisamov/victrix/releases/latest | grep "victrix.*deb" | cut -d : -f 2,3 | tr -d \" | wget -qi - -O victrix.deb && sudo apt install ./victrix.deb -y
 ```
 
 ## Rutas
