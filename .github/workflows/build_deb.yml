@@ -1,58 +1,48 @@
-name: Build and publish .deb package
+name: Generacion y publicacion de .deb
 
 on:
   push:
     branches:
-      - '**'
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
-      - name: Set up dependencies
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Eliminar tags previos
+        run: |
+          gh release list --limit 100 | awk '{print $1}' | xargs -I {} gh release delete {} --yes || true
+          git tag | xargs -I {} git push --delete origin {} || true
+          git tag | xargs -I {} git tag -d {} || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Establecer dependencias
         run: |
           sudo apt update
-          sudo apt install -y dpkg-dev jq curl
-      - name: Create directory structure for .deb
-        run: |
-          mkdir -p package
-          cp -r etc lib usr DEBIAN package/
-          chmod 0755 package/DEBIAN/preinst package/DEBIAN/postinst package/DEBIAN/prerm
-          chmod +x package/usr/sbin/victrix
-          find package/usr/share/man -type f -exec chmod 0644 {} +
+          sudo apt install -y dpkg-dev
 
       - name: Build .deb package
         run: |
-          dpkg-deb --build package victrix.deb
+          sudo chmod 0755 DEBIAN/postinst DEBIAN/prerm 2>/dev/null || chmod -R 0755 DEBIAN/
+          chmod +x usr/sbin/victrix
+          cd ..
+          dpkg-deb --build victrix victrix_1.0_all.deb
+          mv victrix_1.0_all.deb victrix/victrix.deb
 
-      - name: Get or create release
-        id: get_release
-        run: |
-          existing=$(curl -s -H "Authorization: token ${{ secrets.SSP_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/releases/tags/latest)
-
-          release_id=$(echo "$existing" | jq -r '.id')
-          if [ "$release_id" = "null" ]; then
-            created=$(curl -s -X POST \
-              -H "Authorization: token ${{ secrets.SSP_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              -d '{"tag_name": "latest", "name": "Latest Release", "body": "Auto-generated release"}' \
-              https://api.github.com/repos/${{ github.repository }}/releases)
-            release_id=$(echo "$created" | jq -r '.id')
-          else
-            asset_id=$(echo "$existing" | jq -r '.assets[] | select(.name=="victrix.deb") | .id')
-            if [ "$asset_id" != "" ] && [ "$asset_id" != "null" ]; then
-              curl -s -X DELETE -H "Authorization: token ${{ secrets.SSP_TOKEN }}" \
-                https://api.github.com/repos/${{ github.repository }}/releases/assets/$asset_id
-            fi
-          fi
-          echo "release_id=$release_id" >> $GITHUB_OUTPUT
-
-      - name: Upload .deb asset
-        run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.SSP_TOKEN }}" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary @victrix.deb \
-            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets?name=victrix.deb"
+      - name: Crear publicacion y subida de .deb
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
+          draft: false
+          prerelease: false
+          files: victrix.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
