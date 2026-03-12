@@ -40,7 +40,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: latest
-          name: ${{ github.run_number }}
+          #${{ github.run_number }}
+          name: ublavicrtrix
           draft: false
           prerelease: false
           files: victrix.deb
