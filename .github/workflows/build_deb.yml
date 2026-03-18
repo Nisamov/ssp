@@ -15,11 +15,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Eliminar tags previos
+      - name: Eliminar release y tag anteriores
         run: |
-          gh release list --limit 100 | awk '{print $1}' | xargs -I {} gh release delete {} --yes || true
-          git tag | xargs -I {} git push --delete origin {} || true
-          git tag | xargs -I {} git tag -d {} || true
+          gh release delete latest --yes || true
+          git push origin :refs/tags/latest || true
+          git tag -d latest || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -41,7 +41,7 @@ jobs:
         with:
           tag_name: latest
           #${{ github.run_number }}
-          name: ublavicrtrix
+          name: deb
           draft: false
           prerelease: false
           files: victrix.deb
