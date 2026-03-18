@@ -93,6 +93,8 @@ EOF
 show_help_extend() {
     cat <<EOF
 Opciones diponibles:
+
+[victrix OPCION $2]
 ├── -h, --help
 │    └── "Mostrar esta ayuda"
 │        (victrix -h || victrix --help)
